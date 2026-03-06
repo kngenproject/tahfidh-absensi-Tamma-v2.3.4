@@ -1,117 +1,126 @@
 # 📖 Tamma — Tahfidh Juz Amma
 
-Aplikasi web progresif (PWA) untuk pencatatan dan monitoring setoran hafalan Juz 30 (Juz Amma). Dirancang khusus untuk guru/ustadz tahfidh agar mudah merekam dan menganalisis progres hafalan siswa.
+Aplikasi web progresif (PWA) untuk mencatat dan memantau setoran hafalan Juz 30, absensi harian, dan perkembangan siswa. Dirancang untuk digunakan guru/ustadz di kelas tahfidh, dapat diinstall di ponsel dan berjalan sepenuhnya secara offline.
 
 ---
 
 ## ✨ Fitur Utama
 
-- **📝 Setoran Hafalan** — Catat setoran per siswa, pilih surat, ayat, status lancar/kurang lancar, dan ayat yang salah
-- **📅 Absensi Harian** — Rekam kehadiran siswa (Hadir, Ijin, Sakit, Alpha)
-- **📊 Dashboard & Statistik** — Grafik progres hafalan, persentase kehadiran, leaderboard poin
-- **👀 Viewer Data** — Import & tampilkan file Excel (.xlsx/.xls/.csv) hasil export
-- **🏆 Gamifikasi** — Poin dan lencana untuk memotivasi siswa
-- **📱 PWA** — Bisa diinstall di HP, bekerja offline
-- **💾 Lokal Storage** — Data tersimpan di browser, tanpa server/database
+### 🏠 Beranda (Dashboard)
+- **Filter per siswa** — pantau progress, streak, poin, dan aktivitas masing-masing siswa secara individual
+- **Progress Ring Juz 30** — visualisasi persentase surat yang sudah disetor
+- **Streak harian** — hitungan hari berturut-turut siswa aktif menyetor
+- **Heatmap 30 hari** — kalender aktivitas setoran bergaya GitHub contribution graph
+- **Target hari ini** — tampilkan setoran terakhir hari ini beserta statusnya
+- **Aktivitas terbaru** — 5 setoran terbaru secara real-time
+
+### 📝 Tahfidh (Setoran)
+- Form setoran Juz 30 lengkap: pilih siswa, surat (An-Naba' s/d An-Nas), rentang ayat
+- **Evaluasi ayat** — ketuk ayat yang salah, tandai kategori (Tajwid / Panjang Pendek / Makhraj)
+- Status setoran: Lancar (L) / Kurang Lancar (KL)
+- Tambahan: Belum Khatam / Muroja'ah / Tasmi'
+- Riwayat setoran dengan tabel lengkap + tombol hapus per baris
+- Filter kelas pada form setoran
+- Import daftar siswa dari file Excel (Kolom A = Nama, Kolom C = Kelas)
+- **Download laporan Excel** — setoran saja, atau gabungan setoran + absensi
+
+### 📋 Absensi
+- Kartu absensi per siswa dengan tombol cepat: Hadir / Ijin / Sakit / Alpha
+- Filter kelas pada daftar siswa
+- Statistik ringkasan: total hadir, ijin, sakit, alpha
+- Riwayat absensi hari ini
+- **Simpan Excel** — satu file semua siswa
+- **Export Per Kelas** — file terpisah per kelas (`absensi_7A_2026-03-06.xlsx`, dst.) untuk kemudahan distribusi ke wali kelas
+
+### 📊 Statistik & Analitik
+- **Tab Pribadi** — grafik performa mingguan, statistik detail (total setoran, rata-rata ayat/hari, persentase lancar, surat terbanyak, khatam count), lencana pencapaian
+- **Tab Kelas** — grafik perbandingan antar siswa, leaderboard ranking
+- **Tab Trend** — grafik trend 30 hari terakhir, insight analisis pola mengaji
+
+### 📂 Viewer
+- Upload file Excel riwayat setoran atau absensi dari luar
+- Filter berdasarkan status (Lancar, Kurang Lancar, Hadir, Ijin, Sakit, Alpha)
+- Filter kelas pada data viewer
+- Hapus baris data langsung dari viewer
+
+### ⚙️ Tentang / Pengaturan
+- Manajemen data siswa (lihat daftar, hapus semua)
+- Pengaturan ukuran font (Kecil / Normal / Sedang / Besar)
+- Aktifkan notifikasi reminder mengaji harian (jam 16.00)
+- Informasi aplikasi dan versi
 
 ---
 
-## 🚀 Cara Deploy ke GitHub Pages
+## 📲 Instalasi sebagai Aplikasi
 
-### 1. Buat Repository Baru
-- Buka [github.com](https://github.com) → **New repository**
-- Nama repo: `tamma` (atau sesuai keinginan)
-- Set ke **Public**
-- Klik **Create repository**
+Tamma adalah PWA — dapat diinstall langsung dari browser tanpa perlu App Store:
 
-### 2. Upload File
-Upload semua file berikut ke repository:
-
-```
-tamma/
-├── index.html          ← Aplikasi utama
-├── manifest.json       ← Konfigurasi PWA
-├── sw.js               ← Service Worker (offline support)
-├── README.md           ← Dokumentasi ini
-└── icons/
-    ├── icon-192.png    ← Icon PWA kecil
-    ├── icon-512.png    ← Icon PWA besar
-    └── favicon.png     ← Favicon browser
-```
-
-### 3. Aktifkan GitHub Pages
-- Di repository → **Settings** → **Pages**
-- Source: **Deploy from a branch**
-- Branch: **main** → folder: **/ (root)**
-- Klik **Save**
-
-### 4. Akses Aplikasi
-Setelah beberapa menit, aplikasi bisa diakses di:
-```
-https://<username>.github.io/<nama-repo>/
-```
+1. Buka file `index.html` di browser (Chrome / Safari / Edge)
+2. Buka sekali saat ada koneksi internet agar aset ter-cache
+3. Klik banner **"Pasang sebagai Aplikasi"** atau gunakan menu browser → *Add to Home Screen*
+4. Aplikasi siap digunakan offline sepenuhnya
 
 ---
 
-## 📁 Struktur File
+## 🔌 Offline Support
 
-| File | Keterangan |
-|------|------------|
-| `index.html` | Seluruh aplikasi (HTML + CSS + JS dalam 1 file) |
-| `manifest.json` | Metadata PWA untuk instalasi di HP |
-| `sw.js` | Service Worker untuk mode offline |
-| `icons/` | Icon aplikasi berbagai ukuran |
+Semua fitur inti berjalan tanpa koneksi internet setelah dibuka sekali saat online:
+
+| Fitur | Online | Offline |
+|---|---|---|
+| Setoran & absensi | ✅ | ✅ |
+| Progress & dashboard | ✅ | ✅ |
+| Export Excel | ✅ | ✅ (jika sudah pernah online) |
+| Grafik statistik | ✅ | ✅ (jika sudah pernah online) |
+| Ikon Font Awesome | ✅ | ✅ (jika sudah pernah online) |
+
+Data disimpan di `localStorage` browser — tidak memerlukan server atau database.
 
 ---
 
-## 📱 Cara Install di HP (PWA)
+## 📁 Struktur Data Excel Import
 
-**Android (Chrome):**
-1. Buka URL aplikasi di Chrome
-2. Tap ikon **⋮** (menu) → **"Tambahkan ke layar utama"**
-3. Atau tunggu banner install muncul → tap **Pasang**
+### Import Daftar Siswa
+| Kolom A | Kolom B | Kolom C |
+|---|---|---|
+| Nama Siswa | *(bebas)* | Kelas |
 
-**iOS (Safari):**
-1. Buka URL aplikasi di Safari
-2. Tap ikon **Share** (kotak dengan panah ke atas)
-3. Pilih **"Add to Home Screen"**
+### Export Setoran
+| Tanggal | Nama | Surat | Rentang | Status | Jml Salah | Ayat Salah | Kategori | Tambahan |
+|---|---|---|---|---|---|---|---|---|
+
+### Export Absensi
+| No | Nama | Kelas | Status | Waktu |
+|---|---|---|---|---|
 
 ---
 
 ## 🛠️ Teknologi
 
-- HTML5 + CSS3 + Vanilla JavaScript
-- [Chart.js](https://www.chartjs.org/) — Grafik statistik
-- [SheetJS (xlsx)](https://sheetjs.com/) — Import/export Excel
-- [Font Awesome](https://fontawesome.com/) — Icon
-- PWA (Service Worker + Web App Manifest)
-- localStorage — Penyimpanan data lokal
+- **Vanilla HTML/CSS/JS** — tidak ada framework, tidak ada build step
+- **Chart.js** — grafik statistik
+- **SheetJS (XLSX)** — baca dan tulis file Excel
+- **Font Awesome 6** — ikon
+- **Service Worker + Cache API** — offline-first PWA
+- **localStorage** — penyimpanan data lokal
 
 ---
 
-## 📊 Format Excel untuk Import
+## 🚀 Cara Pakai
 
-Kolom yang dikenali saat import file Excel:
+1. Clone atau download repository ini
+2. Buka `index.html` langsung di browser (tidak perlu server)
+3. Import daftar siswa via Excel di tab **Tahfidh**
+4. Mulai catat setoran dan absensi
 
-| Kolom | Nama yang Diterima |
-|-------|--------------------|
-| Tanggal | `tanggal`, `date` |
-| Nama Siswa | `nama siswa`, `nama`, `name` |
-| Surat | `surat` |
-| Rentang Ayat | `rentang ayat`, `rentang`, `ayat` |
-| Status | `status` |
-| Jumlah Salah | `jml salah`, `jumlah salah` |
-| Ayat Salah | `ayat salah` |
-| Kategori | `kategori salah`, `kategori`, `ket` |
-| Kelas | `tambahan`, `kelas`, `catatan` |
-| Waktu | `waktu`, `time` |
+```bash
+git clone https://github.com/username/tamma-tahfidh.git
+cd tamma-tahfidh
+# Buka index.html di browser
+```
 
 ---
 
 ## 📄 Lisensi
 
-Dibuat untuk keperluan pendidikan tahfidh. Bebas digunakan dan dimodifikasi.
-
----
-
-> **Versi:** 2.3.4 | Dibuat dengan ❤️ untuk kemudahan guru tahfidh
+MIT License — bebas digunakan dan dimodifikasi untuk kebutuhan pendidikan.
