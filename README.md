@@ -317,7 +317,7 @@ MIT License — Copyright (c) 2025 Tamma Project
 
 <br/>
 
-**Tamma v3.1** · Tahfidh Juz Amma Management System
+**Tamma v2.3.4** · Tahfidh Juz Amma Management System
 
 Dibuat dengan ❤️ untuk kemudahan manajemen program Tahfidh Al-Qur'an
 
