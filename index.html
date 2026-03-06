@@ -1061,6 +1061,41 @@ select, input[type=file] {
   margin-top:2px; 
 }
 
+/* Siswa Selector Dashboard */
+.siswa-selector-bar {
+  background: var(--surf);
+  border-radius: var(--r);
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  box-shadow: var(--sh);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.siswa-selector-bar i {
+  color: var(--g6);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.siswa-selector-bar select {
+  flex: 1;
+  margin: 0;
+  padding: 8px 28px 8px 10px;
+  font-weight: 600;
+  border-color: var(--g4);
+  color: var(--g8);
+  background-color: var(--g0);
+}
+.siswa-selector-label {
+  font-size: .6rem;
+  font-weight: 700;
+  color: var(--mut);
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  flex-shrink: 0;
+}
+
 /* Progress Ring */
 .progress-ring-container { 
   display:flex; 
@@ -1164,7 +1199,7 @@ select, input[type=file] {
   display:flex; 
   align-items:center; 
   justify-content:center; 
-  font-size:1rem; 
+  font-size:.5rem; 
   color:var(--mut); 
   min-height: 24px;
 }
@@ -1685,6 +1720,15 @@ select, input[type=file] {
 
     <!-- TAB 0 — DASHBOARD -->
     <div class="pg active" id="pg0">
+      <!-- Siswa Selector -->
+      <div class="siswa-selector-bar">
+        <i class="fas fa-user-graduate"></i>
+        <span class="siswa-selector-label">Siswa</span>
+        <select id="dashboardSiswaSelect" onchange="onDashboardSiswaChange()">
+          <option value="SEMUA">— Semua Siswa —</option>
+        </select>
+      </div>
+
       <!-- Streak & Points - EXPLICIT 2 COLUMNS -->
       <div style="display:grid; grid-template-columns: 1fr 1fr !important; gap:10px; margin-bottom:10px; width: 100%;">
         <div class="streak-container" id="streakContainer">
@@ -1883,7 +1927,7 @@ select, input[type=file] {
         </div>
         <div class="tbl-wrapper">
           <table class="tbl">
-            <thead><tr><th>Nama</th><th>Surat &amp; Ayat</th><th>Status</th><th>Ket</th><th></th></tr></thead>
+            <thead><tr><th>Nama</th><th>Surat &amp; Ayat</th><th>St</th><th>Ket</th><th></th></tr></thead>
             <tbody id="tblSetoran"></tbody>
           </table>
           <div id="emptySetoran" class="tempty" style="display:none">
@@ -1940,10 +1984,13 @@ select, input[type=file] {
       </div>
 
       <!-- Actions -->
-      <div class="brow mt8" style="margin-bottom:6px">
+      <div class="brow mt8">
         <button class="btn bp" onclick="simpanAbsensi()"><i class="fas fa-save"></i> Simpan Excel</button>
         <button class="btn bd" onclick="resetAbsensiHarian()"><i class="fas fa-trash-alt"></i> Reset Hari Ini</button>
       </div>
+      <button class="btn bo bfull mt6" style="margin-bottom:6px" onclick="exportAbsensiPerKelas()">
+        <i class="fas fa-layer-group"></i> Export Per Kelas
+      </button>
     </div>
 
     <!-- TAB 3 — STATISTIK & ANALITIK -->
@@ -2083,7 +2130,7 @@ select, input[type=file] {
 
       <!-- List header + body -->
       <div class="lhdr" id="vlhdr" style="display:none">
-        <span>Nama</span><span>Detail</span><span style="text-align:center">Status</span><span>Ket</span>
+        <span>Nama</span><span>Detail</span><span style="text-align:center">St</span><span>Ket</span>
       </div>
       <div class="lbody" id="vlist">
         <div class="empty">
@@ -2254,11 +2301,91 @@ select, input[type=file] {
   document.head.appendChild(Object.assign(document.createElement('link'),{rel:'manifest',href:URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}))}));
 })();
 if('serviceWorker' in navigator){
-  const sw=`const C='ngaji-v4';self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(n=>n!==C).map(n=>caches.delete(n)))));self.clients.claim()});self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))));`;
-  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})),{scope:'/'}).catch(()=>{});
+  const CACHE = 'tamma-v1';
+  const ASSETS = [
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2',
+    'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+    'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
+  ];
+
+  const sw = `
+const CACHE = '${CACHE}';
+const ASSETS = ${JSON.stringify(ASSETS)};
+
+// Install: pre-cache semua aset CDN
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE).then(cache => {
+      // Cache satu per satu agar satu gagal tidak blokir semua
+      return Promise.allSettled(ASSETS.map(url =>
+        cache.add(url).catch(() => {})
+      ));
+    }).then(() => self.skipWaiting())
+  );
+});
+
+// Activate: hapus cache lama
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
+  );
+});
+
+// Fetch: cache-first untuk CDN, network-first untuk dokumen utama
+self.addEventListener('fetch', e => {
+  const url = e.request.url;
+  const isCDN = url.includes('cdnjs.cloudflare.com') || url.includes('cdn.jsdelivr.net');
+
+  if (isCDN) {
+    // Cache-first: CDN aset
+    e.respondWith(
+      caches.match(e.request).then(cached => {
+        if (cached) return cached;
+        return fetch(e.request).then(res => {
+          const clone = res.clone();
+          caches.open(CACHE).then(cache => cache.put(e.request, clone));
+          return res;
+        });
+      })
+    );
+  } else {
+    // Network-first: dokumen HTML utama
+    e.respondWith(
+      fetch(e.request).then(res => {
+        const clone = res.clone();
+        caches.open(CACHE).then(cache => cache.put(e.request, clone));
+        return res;
+      }).catch(() => caches.match(e.request))
+    );
+  }
+});
+`;
+
+  navigator.serviceWorker.register(
+    URL.createObjectURL(new Blob([sw], {type:'application/javascript'})),
+    {scope:'/'}
+  ).then(reg => {
+    // Jika SW sudah aktif, cek cache CDN — jika belum ada, trigger update
+    reg.addEventListener('updatefound', () => {});
+  }).catch(() => {});
+
+  // Informasikan user saat offline
+  navigator.serviceWorker.ready.then(() => {
+    window.addEventListener('online', () => {
+      document.getElementById('offline').style.display = 'none';
+      showToast('Kembali online ✓', 'success');
+    });
+    window.addEventListener('offline', () => {
+      document.getElementById('offline').style.display = 'block';
+      showToast('Mode offline — semua fitur tetap berjalan', 'info', 4000);
+    });
+  });
 }
-window.addEventListener('online',()=>document.getElementById('offline').style.display='none');
-window.addEventListener('offline',()=>document.getElementById('offline').style.display='block');
 
 let dp=null;
 window.addEventListener('beforeinstallprompt',e=>{
@@ -2303,7 +2430,7 @@ function scheduleNotifications(){
       if(Notification.permission === 'granted'){
         new Notification('Waktunya Mengaji! 📖',{
           body: 'Jangan lupa setoran hari ini. Pertahankan streak!',
-          icon: 'https://cdn-icons-png.flaticon.com/512/2912/2912780.png'
+          icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExMiIgZmlsbD0iIzBjNGEyYSIvPjx0ZXh0IHg9IjI1NiIgeT0iMzIwIiBmb250LXNpemU9IjI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+VjDwvdGV4dD48L3N2Zz4='
         });
       }
     }, reminderTime - now);
@@ -2407,6 +2534,7 @@ function quickAction(){
 ============================== */
 let masterSiswa = JSON.parse(localStorage.getItem('db_master_siswa')) || [];
 let dataSetoran = JSON.parse(localStorage.getItem('db_setoran')) || [];
+let vData = [], vFil = 'SEMUA', vCols = {};
 let dataAbsensi = JSON.parse(localStorage.getItem('db_absensi_harian')) || [];
 let userPoints = JSON.parse(localStorage.getItem('db_points')) || {};
 let userStreaks = JSON.parse(localStorage.getItem('db_streaks')) || {};
@@ -2452,7 +2580,38 @@ const SURAT_JUZ30 = [
 /* ==============================
    DASHBOARD FUNCTIONS
 ============================== */
+/* ==============================
+   DASHBOARD SISWA FILTER
+============================== */
+let activeDashboardSiswa = 'SEMUA';
+
+function onDashboardSiswaChange(){
+  activeDashboardSiswa = document.getElementById('dashboardSiswaSelect').value;
+  updateDashboard();
+}
+
+function updateDashboardSiswaDropdown(){
+  const sel = document.getElementById('dashboardSiswaSelect');
+  const prev = sel.value;
+  sel.innerHTML = '<option value="SEMUA">— Semua Siswa —</option>';
+  masterSiswa.forEach(s=>{
+    const opt = document.createElement('option');
+    opt.value = s.nama;
+    opt.textContent = s.nama + (s.kelas ? ` (${s.kelas})` : '');
+    sel.appendChild(opt);
+  });
+  // Pertahankan pilihan sebelumnya jika masih ada
+  if([...sel.options].some(o=>o.value===prev)) sel.value = prev;
+  else { sel.value = 'SEMUA'; activeDashboardSiswa = 'SEMUA'; }
+}
+
+function getFilteredSetoran(){
+  if(activeDashboardSiswa === 'SEMUA') return dataSetoran;
+  return dataSetoran.filter(s => s.nama === activeDashboardSiswa);
+}
+
 function updateDashboard(){
+  updateDashboardSiswaDropdown();
   updateStreakDisplay();
   updatePointsDisplay();
   updateProgressRing();
@@ -2466,25 +2625,31 @@ function updateDashboard(){
 }
 
 function updateStreakDisplay(){
-  let maxStreak = 0;
-  Object.values(userStreaks).forEach(s=>{ if(s > maxStreak) maxStreak = s; });
+  const filtered = getFilteredSetoran();
+  let streak = 0;
+  
+  if(activeDashboardSiswa === 'SEMUA'){
+    // Streak = siswa dengan streak tertinggi
+    Object.values(userStreaks).forEach(s=>{ if(s > streak) streak = s; });
+  } else {
+    streak = userStreaks[activeDashboardSiswa] || 0;
+  }
   
   const container = document.getElementById('streakContainer');
-  document.getElementById('streakCount').textContent = maxStreak;
+  document.getElementById('streakCount').textContent = streak;
   
-  if(maxStreak >= 30){
+  container.style.background = '';
+  container.style.color = '';
+  if(streak >= 30){
     container.style.background = 'linear-gradient(135deg,#ffd700,#ffed4e)';
     container.style.color = '#8b7500';
-  } else if(maxStreak >= 7){
+  } else if(streak >= 7){
     container.style.background = 'linear-gradient(135deg,#ff6b35,#f7931e)';
   }
   
-  const today = new Date().toDateString();
-  const hasActivityToday = dataSetoran.some(s=>{
-    const d = new Date();
-    return s.tgl === d.toLocaleDateString('id-ID');
-  });
-  if(!hasActivityToday && maxStreak > 0){
+  const today = new Date().toLocaleDateString('id-ID');
+  const hasActivityToday = filtered.some(s => s.tgl === today);
+  if(!hasActivityToday && streak > 0){
     container.classList.add('streak-warning');
   } else {
     container.classList.remove('streak-warning');
@@ -2493,13 +2658,18 @@ function updateStreakDisplay(){
 
 function updatePointsDisplay(){
   let totalPoints = 0;
-  Object.values(userPoints).forEach(p=> totalPoints += p);
+  if(activeDashboardSiswa === 'SEMUA'){
+    Object.values(userPoints).forEach(p=> totalPoints += p);
+  } else {
+    totalPoints = userPoints[activeDashboardSiswa] || 0;
+  }
   document.getElementById('pointsCount').textContent = totalPoints;
 }
 
 function updateProgressRing(){
+  const filtered = getFilteredSetoran();
   const completedSurat = new Set();
-  dataSetoran.forEach(s=> completedSurat.add(s.surat));
+  filtered.forEach(s=> completedSurat.add(s.surat));
   
   const total = SURAT_JUZ30.length;
   const completed = completedSurat.size;
@@ -2518,6 +2688,7 @@ function updateProgressRing(){
 }
 
 function renderHeatmap(){
+  const filtered = getFilteredSetoran();
   const grid = document.getElementById('heatmapGrid');
   grid.innerHTML = '';
   
@@ -2527,7 +2698,7 @@ function renderHeatmap(){
     const dateStr = d.toLocaleDateString('id-ID');
     const dayNum = d.getDate();
     
-    const setoranCount = dataSetoran.filter(s=>s.tgl === dateStr).length;
+    const setoranCount = filtered.filter(s=>s.tgl === dateStr).length;
     
     const div = document.createElement('div');
     div.className = 'heatmap-day';
@@ -2547,16 +2718,17 @@ function renderHeatmap(){
 }
 
 function updateTodayTarget(){
+  const filtered = getFilteredSetoran();
   const container = document.getElementById('todayTarget');
   const today = new Date().toLocaleDateString('id-ID');
-  const todaySetoran = dataSetoran.filter(s=>s.tgl === today);
+  const todaySetoran = filtered.filter(s=>s.tgl === today);
   
   if(todaySetoran.length === 0){
     container.innerHTML = `
       <div style="text-align:center; padding:25px; color:var(--mut);">
         <div style="font-size:2.5rem; margin-bottom:10px;">🎯</div>
-        <div style="font-size:.9rem; font-weight:600;">Belum ada target</div>
-        <div style="font-size:.75rem; margin-top:6px;">Tambahkan setoran untuk membuat target</div>
+        <div style="font-size:.9rem; font-weight:600;">Belum ada setoran hari ini</div>
+        <div style="font-size:.75rem; margin-top:6px;">${activeDashboardSiswa === 'SEMUA' ? 'Tambahkan setoran untuk melihat aktivitas' : 'Belum ada setoran dari ' + activeDashboardSiswa}</div>
       </div>`;
   } else {
     const lastSetoran = todaySetoran[0];
@@ -2564,22 +2736,24 @@ function updateTodayTarget(){
       <div style="display:flex; align-items:center; gap:15px;">
         <div style="font-size:3rem;">✅</div>
         <div style="flex:1;">
-          <div style="font-weight:700; color:var(--txt); font-size: .95rem;">${lastSetoran.surat}</div>
-          <div style="font-size:.8rem; color:var(--mut);">Ayat ${lastSetoran.rentang}</div>
-          <div style="margin-top:8px;">
+          <div style="font-weight:700; color:var(--txt); font-size:.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${lastSetoran.nama}</div>
+          <div style="font-weight:600; color:var(--g8); font-size:.85rem;">${lastSetoran.surat}</div>
+          <div style="font-size:.75rem; color:var(--mut);">Ayat ${lastSetoran.rentang}</div>
+          <div style="margin-top:6px;">
             <span class="bdg ${lastSetoran.stat === 'L' ? 'bg' : 'bgd'}">${lastSetoran.stat === 'L' ? 'Lancar' : 'Kurang Lancar'}</span>
           </div>
         </div>
       </div>
-      <div style="margin-top:12px; font-size:.8rem; color:var(--mut);">
-        ${todaySetoran.length} setoran hari ini • Lanjutkan!
+      <div style="margin-top:10px; font-size:.78rem; color:var(--mut);">
+        ${todaySetoran.length} setoran hari ini${activeDashboardSiswa !== 'SEMUA' ? ' oleh ' + activeDashboardSiswa : ''} • Lanjutkan!
       </div>`;
   }
 }
 
 function renderRecentActivity(){
   const container = document.getElementById('recentActivity');
-  const recent = [...dataSetoran].slice(0, 5);
+  const filtered = getFilteredSetoran();
+  const recent = [...filtered].slice(0, 5);
   
   if(recent.length === 0){
     container.innerHTML = `
@@ -3571,6 +3745,47 @@ function simpanAbsensi(){
   showToast('File absensi diunduh','success');
 }
 
+function exportAbsensiPerKelas(){
+  if(!masterSiswa.length){ showToast('Tidak ada data siswa','warning'); return; }
+
+  const d = new Date();
+  const tglStr = d.toLocaleDateString('id-ID', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  const dateFile = new Date().toISOString().slice(0,10);
+
+  const kelasUnik = [...new Set(masterSiswa.map(s => (s.kelas || 'Umum').trim()))].sort();
+
+  kelasUnik.forEach(kelas => {
+    const siswaKelas = masterSiswa.filter(s => (s.kelas || 'Umum').trim() === kelas);
+    const absenKelas = siswaKelas.map(s => {
+      const absen = dataAbsensi.find(a => a.nama === s.nama);
+      return [s.nama, kelas, absen ? absen.status : 'Belum Absen', absen ? (absen.waktu || '-') : '-'];
+    });
+
+    const hadir = absenKelas.filter(r => r[2] === 'Hadir').length;
+    const ijin  = absenKelas.filter(r => r[2] === 'Ijin').length;
+    const sakit = absenKelas.filter(r => r[2] === 'Sakit').length;
+    const alpha = absenKelas.filter(r => r[2] === 'Alpha').length;
+    const belum = absenKelas.filter(r => r[2] === 'Belum Absen').length;
+
+    const rows = [
+      [`ABSENSI KELAS: ${kelas}`],
+      ['Tanggal', tglStr],
+      ['Total Siswa', siswaKelas.length],
+      ['Hadir', hadir], ['Ijin', ijin], ['Sakit', sakit], ['Alpha', alpha], ['Belum Absen', belum],
+      [],
+      ['No', 'Nama', 'Kelas', 'Status', 'Waktu'],
+      ...absenKelas.map((r, i) => [i+1, ...r])
+    ];
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), kelas.substring(0, 31));
+    const safeKelas = kelas.replace(/[\/\\:*?"<>|]/g, '_');
+    XLSX.writeFile(wb, `absensi_${safeKelas}_${dateFile}.xlsx`);
+  });
+
+  showToast(`${kelasUnik.length} file berhasil diunduh`, 'success');
+}
+
 function resetAbsensiHarian(){
   if(!confirm('Reset data absensi hari ini?')) return;
   
@@ -3592,8 +3807,6 @@ function resetAbsensiHarian(){
 /* ==============================
    VIEWER FUNCTIONS
 ============================== */
-let vData = [], vFil = 'SEMUA', vCols = {};
-
 function detectCols(headers){
   const h = headers.map(x => (x||'').toString().toLowerCase().trim());
   function find(...cs){ for(const c of cs){ const i = h.findIndex(x => x.includes(c)); if(i>=0) return headers[i]; } return null; }
@@ -3814,6 +4027,7 @@ function hapusSemuaDataSiswa(){
   dataAbsensi = [];
   userPoints = {};
   userStreaks = {};
+  activeDashboardSiswa = 'SEMUA';
   
   localStorage.setItem('db_master_siswa', JSON.stringify(masterSiswa));
   localStorage.setItem('db_setoran', JSON.stringify(dataSetoran));
@@ -3838,6 +4052,25 @@ function hapusSemuaDataSiswa(){
    INIT
 ============================== */
 document.addEventListener('DOMContentLoaded', function() {
+  // Guard: cek library kritis tersedia
+  if(typeof XLSX === 'undefined'){
+    document.querySelectorAll('[onclick*="download"],[onclick*="simpanAbsensi"],[onclick*="export"]').forEach(btn => {
+      btn.disabled = true;
+      btn.title = 'Library Excel belum ter-cache. Buka sekali saat online.';
+      btn.style.opacity = '.5';
+    });
+    showToastSafe('Buka sekali saat online agar fitur export tersedia offline', 'warning', 5000);
+  }
+  if(typeof Chart === 'undefined'){
+    document.querySelectorAll('.chart-container canvas').forEach(c => {
+      c.style.display = 'none';
+      const msg = document.createElement('div');
+      msg.style.cssText = 'text-align:center;padding:30px;color:var(--mut);font-size:.8rem;';
+      msg.innerHTML = '📶 Grafik tersedia setelah buka sekali saat online';
+      c.parentNode.appendChild(msg);
+    });
+  }
+
   renderDdSiswa();
   renderAyatList();
   renderTblSetoran();
@@ -3859,9 +4092,12 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('notifBanner').classList.add('show');
     }, 2000);
   }
-  
-
 });
+
+// Toast aman sebelum DOM siap
+function showToastSafe(msg, type, duration){
+  if(typeof showToast === 'function') showToast(msg, type, duration);
+}
 </script>
 </body>
 </html>
