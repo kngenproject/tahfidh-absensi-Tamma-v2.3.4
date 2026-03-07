@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <!-- Gunakan versi spesifik agar konsisten dengan cache -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<!-- Font Awesome replaced with emoji for offline support -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <!-- URL Chart.js disamakan dengan yang di-cache -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -230,13 +230,13 @@ body {
   min-width: 0;
   height: 100%;
 }
-.nb i { 
+.nb i, .nb .ico { 
   font-size:1.1rem; 
   line-height:1; 
   transition:transform .2s; 
 }
 .nb.on { color:var(--goldl); }
-.nb.on i { transform:translateY(-2px); }
+.nb.on i, .nb.on .ico { transform:translateY(-2px); }
 .nb.on::after { 
   content:''; 
   position:absolute; 
@@ -324,7 +324,7 @@ body {
   flex-direction:column;
   gap:2px;
 }
-.is-info i { 
+.is-info i, .is-info .ico { 
   color:var(--g4); 
   font-size:1rem; 
   flex-shrink:0; 
@@ -1599,7 +1599,7 @@ select, input[type=file] {
   .scn { font-size: 1.2rem; }
   .badges-grid { grid-template-columns: repeat(3, 1fr) !important; }
   .nb { font-size: .82rem; }
-  .nb i { font-size: 1rem; }
+  .nb i, .nb .ico { font-size: 1rem; }
   .strow { grid-template-columns: repeat(4, 1fr) !important; }
 }
 @media (min-width: 480px) {
@@ -1625,7 +1625,7 @@ select, input[type=file] {
   .hdr-sub { font-size: .82rem; }
   .scn { font-size: 1.6rem; }
   .nb { font-size: .82rem; }
-  .nb i { font-size: 1.3rem; }
+  .nb i, .nb .ico { font-size: 1.3rem; }
   .card { margin-bottom: 12px; }
   .lhdr, .lrow { grid-template-columns: 2fr 1.8fr 44px 1.2fr !important; }
 }
@@ -1638,6 +1638,22 @@ select, input[type=file] {
   .badges-grid { grid-template-columns: repeat(8, 1fr) !important; }
   .chart-container { height: 280px; }
 }
+
+/* Emoji icon fallback (replaces Font Awesome for offline support) */
+.ico {
+  font-style: normal;
+  font-size: 1rem;
+  line-height: 1;
+  display: inline-block;
+}
+.nb .ico {
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: transform .2s;
+}
+.nb.on .ico { transform: translateY(-2px); }
+.chd .ico { color: var(--g6); margin-right: 5px; }
+.is-info .ico { color: var(--g4); font-size: 1rem; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -1677,7 +1693,7 @@ select, input[type=file] {
     <div class="pg active" id="pg0">
       <!-- Siswa Selector -->
       <div class="siswa-selector-bar">
-        <i class="fas fa-user-graduate"></i>
+        <span class="ico">🎓</span>
         <span class="siswa-selector-label">Siswa</span>
         <select id="dashboardSiswaSelect" onchange="onDashboardSiswaChange()">
           <option value="SEMUA">— Semua Siswa —</option>
@@ -1760,7 +1776,7 @@ select, input[type=file] {
 
       <!-- Today's Target -->
       <div class="card">
-        <div class="chd"><i class="fas fa-bullseye"></i>Target Hari Ini</div>
+        <div class="chd"><span class="ico">🎯</span>Target Hari Ini</div>
         <div class="cbd">
           <div id="todayTarget">
             <div style="text-align:center; padding:25px; color:var(--mut);">
@@ -1774,7 +1790,7 @@ select, input[type=file] {
 
       <!-- Recent Activity -->
       <div class="card">
-        <div class="chd"><i class="fas fa-clock"></i>Aktivitas Terbaru</div>
+        <div class="chd"><span class="ico">⏱️</span>Aktivitas Terbaru</div>
         <div class="cbd" id="recentActivity">
           <div class="empty" style="padding:20px;">
             <div class="eico">📋</div>
@@ -1789,21 +1805,21 @@ select, input[type=file] {
       <!-- IMPORT STRIP -->
       <div class="istrip" id="istrip">
         <div class="is-info">
-          <i class="fas fa-users"></i>
+          <span class="ico">👥</span>
           <div class="is-text">
             <div class="is-lbl" id="istripLbl">Belum ada daftar siswa</div>
             <div class="is-sub">Upload Excel: Kolom A = Nama, Kolom C = Kelas</div>
           </div>
         </div>
         <label class="is-btn" for="xlsIn">
-          <i class="fas fa-upload"></i> Import
+          <span class="ico">📤</span> Import
         </label>
         <input type="file" id="xlsIn" accept=".xlsx,.xls" style="display:none" onchange="importMasterData(this)">
       </div>
 
       <!-- Form Setoran Juz 30 -->
       <div class="card">
-        <div class="chd"><span><i class="fas fa-pen-nib"></i>Form Setoran Juz 30</span></div>
+        <div class="chd"><span><span class="ico">✏️</span>Form Setoran Juz 30</span></div>
         <div class="cbd">
           <!-- Filter Kelas Tahfidh -->
           <div id="kelasFilterTahfidh" style="display:none; margin-bottom:8px;">
@@ -1863,9 +1879,9 @@ select, input[type=file] {
           </div>
           <!-- Tombol -->
           <div class="brow mt10">
-            <button class="btn bp" onclick="simpanSetoran()"><i class="fas fa-save"></i> Simpan</button>
+            <button class="btn bp" onclick="simpanSetoran()"><span class="ico">💾</span> Simpan</button>
             <button class="btn bo" style="flex:0 0 auto;padding:10px 14px" onclick="resetForm()">
-              <i class="fas fa-redo"></i>
+              <span class="ico">↩️</span>
             </button>
           </div>
         </div>
@@ -1874,10 +1890,10 @@ select, input[type=file] {
       <!-- Riwayat Setoran -->
       <div class="card">
         <div class="chd">
-          <span><i class="fas fa-history"></i>Riwayat Setoran</span>
+          <span><span class="ico">🕐</span>Riwayat Setoran</span>
           <div style="display:flex;align-items:center;gap:8px">
             <span class="bdg bg" id="totSetoran">0</span>
-            <button class="btn bsm bd" onclick="hapusSemuaSetoran()"><i class="fas fa-trash-alt"></i></button>
+            <button class="btn bsm bd" onclick="hapusSemuaSetoran()"><span class="ico">🗑️</span></button>
           </div>
         </div>
         <div class="tbl-wrapper">
@@ -1886,16 +1902,16 @@ select, input[type=file] {
             <tbody id="tblSetoran"></tbody>
           </table>
           <div id="emptySetoran" class="tempty" style="display:none">
-            <i class="fas fa-inbox" style="font-size:1.8rem;display:block;margin-bottom:8px;color:#ddd"></i>
+            <span class="ico">📥</span></i>
             Belum ada setoran
           </div>
         </div>
         <div class="cft">
           <button class="btn bp bfull" onclick="downloadSetoran()">
-            <i class="fas fa-download"></i> Download Laporan Excel
+            <span class="ico">⬇️</span> Download Laporan Excel
           </button>
           <button class="btn bo bfull mt6" onclick="downloadLaporanGabungan()">
-            <i class="fas fa-file-excel"></i> Download Gabungan + Absensi
+            <span class="ico">📗</span> Download Gabungan + Absensi
           </button>
         </div>
       </div>
@@ -1914,7 +1930,7 @@ select, input[type=file] {
       <!-- Info Data Siswa -->
       <div class="card">
         <div class="chd">
-          <span><i class="fas fa-users"></i>Daftar Siswa (dari import)</span>
+          <span><span class="ico">👥</span>Daftar Siswa (dari import)</span>
           <div class="bdg bg" id="jmlSiswaAbsen">0</div>
         </div>
         <!-- Filter Kelas Absensi -->
@@ -1932,7 +1948,7 @@ select, input[type=file] {
 
       <!-- Riwayat Absensi Hari Ini -->
       <div class="card">
-        <div class="chd"><i class="fas fa-clock"></i>Riwayat Hari Ini</div>
+        <div class="chd"><span class="ico">⏱️</span>Riwayat Hari Ini</div>
         <div class="cbd" id="riwAbsensi">
           <p class="tempty">Belum ada absensi</p>
         </div>
@@ -1940,11 +1956,11 @@ select, input[type=file] {
 
       <!-- Actions -->
       <div class="brow mt8">
-        <button class="btn bp" onclick="simpanAbsensi()"><i class="fas fa-save"></i> Simpan Excel</button>
-        <button class="btn bd" onclick="resetAbsensiHarian()"><i class="fas fa-trash-alt"></i> Reset Hari Ini</button>
+        <button class="btn bp" onclick="simpanAbsensi()"><span class="ico">💾</span> Simpan Excel</button>
+        <button class="btn bd" onclick="resetAbsensiHarian()"><span class="ico">🗑️</span> Reset Hari Ini</button>
       </div>
       <button class="btn bo bfull mt6" style="margin-bottom:6px" onclick="exportAbsensiPerKelas()">
-        <i class="fas fa-layer-group"></i> Export Per Kelas
+        <span class="ico">📑</span> Export Per Kelas
       </button>
     </div>
 
@@ -1964,7 +1980,7 @@ select, input[type=file] {
         </div>
 
         <div class="card">
-          <div class="chd"><i class="fas fa-chart-pie"></i>Statistik Detail</div>
+          <div class="chd"><span class="ico">📊</span>Statistik Detail</div>
           <div class="cbd">
             <div class="stat-detail">
               <div class="stat-row">
@@ -1993,7 +2009,7 @@ select, input[type=file] {
 
         <!-- Badges Section - EXPLICIT 4 COLUMNS -->
         <div class="card">
-          <div class="chd"><i class="fas fa-medal"></i>Lencana Pencapaian</div>
+          <div class="chd"><span class="ico">🏅</span>Lencana Pencapaian</div>
           <div class="cbd">
             <div class="badges-grid" id="badgesGrid"></div>
           </div>
@@ -2008,7 +2024,7 @@ select, input[type=file] {
         </div>
         
         <div class="card">
-          <div class="chd"><i class="fas fa-trophy"></i>Leaderboard</div>
+          <div class="chd"><span class="ico">🏆</span>Leaderboard</div>
           <div class="cbd" id="leaderboardList">
             <div class="empty">
               <div class="eico">🏆</div>
@@ -2026,7 +2042,7 @@ select, input[type=file] {
         </div>
         
         <div class="card">
-          <div class="chd"><i class="fas fa-lightbulb"></i>Insight AI</div>
+          <div class="chd"><span class="ico">💡</span>Insight AI</div>
           <div class="cbd">
             <div id="aiInsight" style="font-size:.85rem; line-height:1.6; color:var(--txt);">
               <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
@@ -2043,7 +2059,7 @@ select, input[type=file] {
     <!-- TAB 4 — VIEWER -->
     <div class="pg" id="pg4">
       <div class="card">
-        <div class="chd"><i class="fas fa-file-excel"></i>Upload File Riwayat</div>
+        <div class="chd"><span class="ico">📗</span>Upload File Riwayat</div>
         <div class="cbd">
           <div class="slbl">File setoran / absensi (.xlsx, .xls)</div>
           <input type="file" id="fileViewer" accept=".xlsx,.xls,.csv" class="mt6">
@@ -2106,7 +2122,7 @@ select, input[type=file] {
       </div>
 
       <div class="card">
-        <div class="chd"><i class="fas fa-star"></i>Fitur Aplikasi</div>
+        <div class="chd"><span class="ico">⭐</span>Fitur Aplikasi</div>
         <ul class="flist">
           <li>
             <div class="fico fig">📖</div>
@@ -2147,16 +2163,16 @@ select, input[type=file] {
       </div>
 
       <div class="card">
-        <div class="chd"><i class="fas fa-database"></i>Data Siswa Tersimpan</div>
+        <div class="chd"><span class="ico">🗄️</span>Data Siswa Tersimpan</div>
         <div class="cbd">
           <div id="dsSiswaInfo" style="font-size:.85rem;color:var(--mut);margin-bottom:10px">Belum ada siswa tersimpan</div>
           <div id="dsSiswaList" style="max-height:200px;overflow-y:auto;margin-bottom:12px"></div>
-          <button class="btn bd bsm" onclick="hapusSemuaDataSiswa()"><i class="fas fa-trash-alt"></i> Hapus Semua Data Siswa</button>
+          <button class="btn bd bsm" onclick="hapusSemuaDataSiswa()"><span class="ico">🗑️</span> Hapus Semua Data Siswa</button>
         </div>
       </div>
 
       <div class="card">
-        <div class="chd"><i class="fas fa-text-height"></i>Pengaturan Tampilan</div>
+        <div class="chd"><span class="ico">🔤</span>Pengaturan Tampilan</div>
         <div class="cbd">
           <label class="flbl">Ukuran Font</label>
           <div style="display:flex; align-items:center; gap:12px; margin-top:6px;">
@@ -2172,7 +2188,7 @@ select, input[type=file] {
             <button class="btn bo bsm" onclick="changeFontSize(1)" style="width:40px;padding:8px;flex-shrink:0;font-size:1rem;font-weight:800;">A+</button>
           </div>
           <button class="btn bo bsm mt8" onclick="resetFontSize()" style="font-size:.78rem;">
-            <i class="fas fa-undo"></i> Reset ke Default
+            <span class="ico">◉</span> Reset ke Default
           </button>
         </div>
       </div>
@@ -2191,22 +2207,22 @@ select, input[type=file] {
 <div class="bnav">
   <div class="bnav-buttons">
     <button class="nb on" id="nb0" onclick="goPage(0)">
-      <i class="fas fa-home"></i><span>Beranda</span>
+      <span class="ico">🏠</span><span>Beranda</span>
     </button>
     <button class="nb" id="nb1" onclick="goPage(1)">
-      <i class="fas fa-book-open"></i><span>Tahfidh</span>
+      <span class="ico">📖</span><span>Tahfidh</span>
     </button>
     <button class="nb" id="nb2" onclick="goPage(2)">
-      <i class="fas fa-users"></i><span>Absen</span>
+      <span class="ico">👥</span><span>Absen</span>
     </button>
     <button class="nb" id="nb3" onclick="goPage(3)">
-      <i class="fas fa-chart-line"></i><span>Statistik</span>
+      <span class="ico">📈</span><span>Statistik</span>
     </button>
     <button class="nb" id="nb4" onclick="goPage(4)">
-      <i class="fas fa-file-excel"></i><span>Viewer</span>
+      <span class="ico">📗</span><span>Viewer</span>
     </button>
     <button class="nb" id="nb5" onclick="goPage(5)">
-      <i class="fas fa-info-circle"></i><span>Tentang</span>
+      <span class="ico">ℹ️</span><span>Tentang</span>
     </button>
   </div>
   <div class="bnav-safe"></div>
@@ -2214,7 +2230,7 @@ select, input[type=file] {
 
 <!-- Floating Action Button -->
 <button class="fab" onclick="quickAction()" id="fabBtn" title="Tandai Semua Hadir" style="display:none;">
-  <i class="fas fa-user-check" style="font-size:1.4rem;"></i>
+  <span class="ico">✅</span></i>
 </button>
 
 <!-- Install Banner -->
@@ -2260,10 +2276,6 @@ if ('serviceWorker' in navigator) {
   const CACHE = 'tamma-v2';
   // Daftar aset yang harus di-cache - pastikan URL persis dengan yang digunakan
   const ASSETS = [
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2',
     'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
     'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'
   ];
@@ -2420,7 +2432,7 @@ function resetFontSize(){
 ============================== */
 function showToast(msg, type='info', duration=3000){
   const toast = document.getElementById('toast');
-  toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${msg}`;
+  toast.innerHTML = `<span class="ico">ℹ️</span> ${msg}`;
   toast.className = `toast ${type}`;
   toast.classList.add('show');
   setTimeout(()=>toast.classList.remove('show'), duration);
