@@ -1846,6 +1846,30 @@ span > .fai, div > .fai { vertical-align: middle; }
   margin-left: 6px;
 }
 
+
+/* Tombol arah hafalan */
+.arah-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 2px solid var(--brd);
+  background: var(--surf2);
+  cursor: pointer;
+  color: var(--txt);
+  text-align: center;
+  transition: all .2s;
+  line-height: 1.2;
+}
+.arah-btn.on {
+  border-color: var(--g5);
+  background: var(--g1);
+  color: var(--g8);
+}
+.arah-btn:active { transform: scale(.97); }
+
 </style>
 </head>
 <body>
@@ -4210,6 +4234,7 @@ document.addEventListener('DOMContentLoaded', function() {
 ============================== */
 let mpaMode = 'cepat';
 let mpaChecked = new Set();
+let mpaArah = 'naba-nas'; // 'naba-nas' = An-Naba'→An-Nas | 'nas-naba' = An-Nas→An-Naba'
 
 function openPencapaian(){
   if(!masterSiswa.length){
@@ -4222,10 +4247,7 @@ function openPencapaian(){
   const sorted = [...masterSiswa].sort((a,b) => a.nama.localeCompare(b.nama,'id'));
   sorted.forEach(s => sel.add(new Option(s.nama, s.nama)));
 
-  // Populate surat dropdown (Mode Cepat)
-  const suratSel = document.getElementById('mpaSuratSampai');
-  suratSel.innerHTML = '<option value="">— Pilih surat terakhir —</option>';
-  SURAT_JUZ30.forEach((s,i) => suratSel.add(new Option(`${i+1}. ${s.nm} (${s.a} ayat)`, i)));
+  // Mode Cepat dropdown will be built by setMpaArah()
 
   // Set default date = today
   const today = new Date();
@@ -4242,6 +4264,7 @@ function openPencapaian(){
   document.getElementById('quickPreview').textContent = 'Pilih surat terakhir yang sudah dihafal untuk melihat preview.';
   document.getElementById('mpaSelCount').textContent = '0';
   document.getElementById('mpaSuratSampai').value = '';
+  setMpaArah('naba-nas');
   buildSuratCheckGrid();
   document.getElementById('modalPencapaian').classList.add('show');
 }
@@ -4310,25 +4333,67 @@ function updateMpaCount(){
   let count = 0;
   if(mpaMode === 'cepat'){
     const v = document.getElementById('mpaSuratSampai').value;
-    count = v !== '' ? parseInt(v) + 1 : 0;
+    if(v !== ''){
+      if(mpaArah === 'naba-nas'){
+        count = parseInt(v) + 1;            // 0..idx  → idx+1 surat
+      } else {
+        count = SURAT_JUZ30.length - parseInt(v); // idx..36 → 37-idx surat
+      }
+    }
   } else {
     count = mpaChecked.size;
   }
   document.getElementById('mpaSelCount').textContent = count;
 }
 
+function setMpaArah(arah){
+  mpaArah = arah;
+  document.getElementById('arahNabaNas').classList.toggle('on', arah === 'naba-nas');
+  document.getElementById('arahNasNaba').classList.toggle('on', arah === 'nas-naba');
+  // Rebuild dropdown in right order
+  const suratSel = document.getElementById('mpaSuratSampai');
+  const prev = suratSel.value;
+  suratSel.innerHTML = '<option value="">— Pilih surat terakhir —</option>';
+  if(arah === 'naba-nas'){
+    // An-Naba'(0) → An-Nas(36): pilih surat paling akhir yg sudah hafal
+    document.getElementById('mpaLabelSampai').textContent = 'Sudah hafal sampai surat...';
+    SURAT_JUZ30.forEach((s,i) => suratSel.add(new Option(`${i+1}. ${s.nm} (${s.a} ayat)`, i)));
+  } else {
+    // An-Nas(36) → An-Naba'(0): tampilkan terbalik, pilih surat paling akhir ke arah An-Naba'
+    document.getElementById('mpaLabelSampai').textContent = 'Sudah hafal sampai surat...';
+    for(let i = SURAT_JUZ30.length-1; i >= 0; i--){
+      const s = SURAT_JUZ30[i];
+      suratSel.add(new Option(`${i+1}. ${s.nm} (${s.a} ayat)`, i));
+    }
+  }
+  // restore selection if still valid
+  if([...suratSel.options].some(o => o.value === prev)) suratSel.value = prev;
+  else suratSel.value = '';
+  document.getElementById('quickPreview').textContent = 'Pilih arah hafalan dan surat terakhir untuk melihat preview.';
+  updateMpaCount();
+}
+
 function updateQuickPreview(){
   const v = document.getElementById('mpaSuratSampai').value;
   const el = document.getElementById('quickPreview');
   if(v === ''){
-    el.textContent = 'Pilih surat terakhir yang sudah dihafal untuk melihat preview.';
+    el.textContent = 'Pilih arah hafalan dan surat terakhir untuk melihat preview.';
     updateMpaCount();
     return;
   }
   const idx = parseInt(v);
-  const count = idx + 1;
-  const suratList = SURAT_JUZ30.slice(0, count).map(s => s.nm).join(', ');
-  el.innerHTML = `✅ <strong>${count} surat</strong> akan dicatat: <span style="color:var(--mut); font-weight:400;">${suratList}</span>`;
+  let suratList, count;
+  if(mpaArah === 'naba-nas'){
+    // dari index 0 sampai idx
+    count = idx + 1;
+    suratList = SURAT_JUZ30.slice(0, count).map(s => s.nm).join(', ');
+    el.innerHTML = `✅ <strong>${count} surat</strong> (An-Naba' → ${SURAT_JUZ30[idx].nm}): <span style="color:var(--mut); font-weight:400;">${suratList}</span>`;
+  } else {
+    // dari index idx sampai 36 (An-Nas)
+    count = SURAT_JUZ30.length - idx;
+    suratList = SURAT_JUZ30.slice(idx).map(s => s.nm).join(', ');
+    el.innerHTML = `✅ <strong>${count} surat</strong> (${SURAT_JUZ30[idx].nm} → An-Nas): <span style="color:var(--mut); font-weight:400;">${suratList}</span>`;
+  }
   updateMpaCount();
 }
 
@@ -4337,7 +4402,13 @@ function getMpaSelectedIndices(){
     const v = document.getElementById('mpaSuratSampai').value;
     if(v === '') return [];
     const idx = parseInt(v);
-    return Array.from({length: idx+1}, (_,i) => i);
+    if(mpaArah === 'naba-nas'){
+      // 0, 1, 2 ... idx
+      return Array.from({length: idx+1}, (_,i) => i);
+    } else {
+      // idx, idx+1 ... 36 (An-Nas is last)
+      return Array.from({length: SURAT_JUZ30.length - idx}, (_,i) => idx + i);
+    }
   } else {
     return [...mpaChecked].sort((a,b) => a-b);
   }
@@ -4446,17 +4517,29 @@ function showToastSafe(msg, type, duration){
 
       <!-- MODE CEPAT -->
       <div id="mpaCepatPanel">
-        <label class="flbl">Sudah selesai sampai surat...</label>
+
+        <!-- Pilih Arah Hafalan -->
+        <label class="flbl">Arah hafalan</label>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; margin-top:4px;">
+          <button class="arah-btn on" id="arahNabaNas" onclick="setMpaArah('naba-nas')">
+            <span style="font-size:1.1rem;">📖→</span>
+            <span style="font-size:.8rem; font-weight:700; line-height:1.3;">An-Naba' ke An-Nas<br><span style="font-weight:400; color:inherit; opacity:.75;">Muroja'ah / Sudah khatam</span></span>
+          </button>
+          <button class="arah-btn" id="arahNasNaba" onclick="setMpaArah('nas-naba')">
+            <span style="font-size:1.1rem;">←📖</span>
+            <span style="font-size:.8rem; font-weight:700; line-height:1.3;">An-Nas ke An-Naba'<br><span style="font-weight:400; color:inherit; opacity:.75;">Belum khatam (mundur)</span></span>
+          </button>
+        </div>
+
+        <!-- Surat terakhir -->
+        <label class="flbl" id="mpaLabelSampai">Sudah selesai sampai surat...</label>
         <div class="quick-range-wrap">
           <select id="mpaSuratSampai" onchange="updateQuickPreview()" style="background-image:none;">
             <option value="">— Pilih surat terakhir —</option>
           </select>
         </div>
         <div class="quick-preview" id="quickPreview">
-          Pilih surat terakhir yang sudah dihafal untuk melihat preview.
-        </div>
-        <div style="margin-top:10px; font-size:.78rem; color:var(--mut); line-height:1.5;">
-          Semua surat <strong>dari An-Naba' sampai surat yang dipilih</strong> akan dicatat sebagai sudah selesai (Lancar).
+          Pilih arah hafalan dan surat terakhir untuk melihat preview.
         </div>
       </div>
 
