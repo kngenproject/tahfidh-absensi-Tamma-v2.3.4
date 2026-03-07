@@ -2,8 +2,6 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Tamma-Tahfidh Juz Amma (Offline Ready)</title>
 <meta name="theme-color" content="#0c4a2a">
@@ -11,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <!-- Gunakan versi spesifik agar konsisten dengan cache -->
-<!-- Font Awesome replaced with emoji for offline support -->
+<!-- FA replaced with inline SVG -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <!-- URL Chart.js disamakan dengan yang di-cache -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -232,13 +230,13 @@ body {
   min-width: 0;
   height: 100%;
 }
-.nb i, .nb .ico { 
+.nb i { 
   font-size:1.1rem; 
   line-height:1; 
   transition:transform .2s; 
 }
 .nb.on { color:var(--goldl); }
-.nb.on i, .nb.on .ico { transform:translateY(-2px); }
+.nb.on i { transform:translateY(-2px); }
 .nb.on::after { 
   content:''; 
   position:absolute; 
@@ -326,7 +324,7 @@ body {
   flex-direction:column;
   gap:2px;
 }
-.is-info i, .is-info .ico { 
+.is-info i { 
   color:var(--g4); 
   font-size:1rem; 
   flex-shrink:0; 
@@ -1601,7 +1599,7 @@ select, input[type=file] {
   .scn { font-size: 1.2rem; }
   .badges-grid { grid-template-columns: repeat(3, 1fr) !important; }
   .nb { font-size: .82rem; }
-  .nb i, .nb .ico { font-size: 1rem; }
+  .nb i { font-size: 1rem; }
   .strow { grid-template-columns: repeat(4, 1fr) !important; }
 }
 @media (min-width: 480px) {
@@ -1627,7 +1625,7 @@ select, input[type=file] {
   .hdr-sub { font-size: .82rem; }
   .scn { font-size: 1.6rem; }
   .nb { font-size: .82rem; }
-  .nb i, .nb .ico { font-size: 1.3rem; }
+  .nb i { font-size: 1.3rem; }
   .card { margin-bottom: 12px; }
   .lhdr, .lrow { grid-template-columns: 2fr 1.8fr 44px 1.2fr !important; }
 }
@@ -1641,24 +1639,247 @@ select, input[type=file] {
   .chart-container { height: 280px; }
 }
 
-/* Emoji icon fallback (replaces Font Awesome for offline support) */
-.ico {
-  font-style: normal;
-  font-size: 1rem;
-  line-height: 1;
+/* ==============================
+   INLINE FA SVG ICON SYSTEM
+============================== */
+.fai {
   display: inline-block;
+  fill: currentColor;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  overflow: visible;
+  box-sizing: content-box;
 }
-.nb .ico {
-  font-size: 1.1rem;
-  line-height: 1;
-  transition: transform .2s;
+/* Nav bar icons */
+.nb .fai { font-size: 1.15rem; line-height: 1; transition: transform .2s; }
+.nb.on .fai { transform: translateY(-2px); }
+/* Header icons */
+.chd .fai { color: var(--g6); margin-right: 5px; width: .9em; height: .9em; }
+/* Button icons */
+.btn .fai { width: .9em; height: .9em; }
+/* Import strip */
+.is-info .fai { color: var(--g4); font-size: 1rem; flex-shrink: 0; }
+/* Inline icon fix for spans */
+span > .fai, div > .fai { vertical-align: middle; }
+/* fa-spin */
+.fa-spin { animation: fa-spin 1s linear infinite; }
+@keyframes fa-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+
+/* ==============================
+   MODAL PENCAPAIAN AWAL
+============================== */
+.modal-pencapaian {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(12,74,42,.45);
+  backdrop-filter: blur(3px);
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
 }
-.nb.on .ico { transform: translateY(-2px); }
-.chd .ico { color: var(--g6); margin-right: 5px; }
-.is-info .ico { color: var(--g4); font-size: 1rem; flex-shrink: 0; }
+.modal-pencapaian.show { display: flex; }
+.mpa-sheet {
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -4px 24px rgba(0,0,0,.18);
+  animation: slideUp .28s ease;
+}
+@keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+.mpa-hdr {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--brd);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.mpa-title {
+  font-weight: 800;
+  font-size: .95rem;
+  color: var(--g8);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mpa-close {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--mut);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.mpa-close:active { background: var(--brd); }
+.mpa-body {
+  overflow-y: auto;
+  padding: 14px 14px 24px;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+}
+/* Mode tabs */
+.mpa-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 4px;
+}
+.mpa-tab {
+  flex: 1;
+  padding: 8px 6px;
+  border: none;
+  border-radius: 8px;
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  color: var(--mut);
+  transition: all .2s;
+}
+.mpa-tab.on {
+  background: #fff;
+  color: var(--g7);
+  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+}
+/* Surat grid checkboxes */
+.surat-check-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 5px;
+  margin-top: 8px;
+}
+.surat-check-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  border-radius: 8px;
+  border: 1.5px solid var(--brd);
+  background: var(--surf2);
+  cursor: pointer;
+  transition: all .15s;
+  font-size: .8rem;
+  user-select: none;
+}
+.surat-check-item.checked {
+  background: var(--g1);
+  border-color: var(--g5);
+  color: var(--g8);
+}
+.surat-check-item input[type=checkbox] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--g6);
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  appearance: auto;
+  -webkit-appearance: auto;
+  background-image: none;
+}
+.surat-num { 
+  font-size: .72rem; 
+  color: var(--mut); 
+  font-weight: 700; 
+  min-width: 20px;
+}
+.surat-check-item.checked .surat-num { color: var(--g6); }
+/* Quick mode */
+.quick-range-wrap {
+  margin-top: 8px;
+}
+.quick-preview {
+  background: var(--g1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  font-size: .82rem;
+  color: var(--g8);
+  font-weight: 600;
+  min-height: 40px;
+}
+/* Info badge */
+.info-badge {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 9px 10px;
+  font-size: .78rem;
+  color: #92400e;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+.mpa-footer {
+  flex-shrink: 0;
+  padding: 10px 14px 14px;
+  border-top: 1px solid var(--brd);
+}
+/* Selected count badge */
+.sel-count {
+  display: inline-flex;
+  align-items: center;
+  background: var(--g6);
+  color: #fff;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: .78rem;
+  font-weight: 700;
+  margin-left: 6px;
+}
+
 </style>
 </head>
 <body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="fai_home" viewBox="0 0 576 512"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.4 0-2.8 0-4.2-.1c-1.1 .1-2.2 .1-3.3 .1H96c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></symbol>
+  <symbol id="fai_book_open" viewBox="0 0 576 512"><path d="M249.6 471.5c10.8 3.8 22.4-4.1 22.4-15.5V78.6c0-4.2-1.6-8.4-5-11C247.4 52 202.4 32 144 32C93.5 32 46.3 45.3 18.1 56.1C6.8 60.5 0 71.7 0 83.8V454.1c0 11.9 12.8 20.2 24.1 16.5C55.6 460.1 105.5 448 144 448c33.9 0 79 14 105.6 23.5zm76.8 0C353 462 398.1 448 432 448c38.5 0 88.4 12.1 119.9 22.6c11.3 3.8 24.1-4.6 24.1-16.5V83.8c0-12.1-6.8-23.3-18.1-27.6C529.7 45.3 482.5 32 432 32c-58.4 0-103.4 20-123 35.6c-3.3 2.6-5 6.8-5 11V456c0 11.4 11.7 19.3 22.4 15.5z"/></symbol>
+  <symbol id="fai_users" viewBox="0 0 640 512"><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></symbol>
+  <symbol id="fai_chart_line" viewBox="0 0 512 512"><path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/></symbol>
+  <symbol id="fai_file_excel" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM155.7 250.2L192 302.1l36.3-51.9c7.6-10.9 22.6-13.5 33.4-5.9s13.5 22.6 5.9 33.4L221.3 344l46.4 66.2c7.6 10.9 5 25.8-5.9 33.4s-25.8 5-33.4-5.9L192 385.8l-36.3 51.9c-7.6 10.9-22.6 13.5-33.4 5.9s-13.5-22.6-5.9-33.4L162.7 344l-46.4-66.2c-7.6-10.9-5-25.8 5.9-33.4s25.8-5 33.4 5.9z"/></symbol>
+  <symbol id="fai_info_circle" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></symbol>
+  <symbol id="fai_bullseye" viewBox="0 0 512 512"><path d="M448 256A192 192 0 1 0 64 256a192 192 0 1 0 384 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 80a80 80 0 1 0 0-160 80 80 0 1 0 0 160zm0-224a144 144 0 1 1 0 288 144 144 0 1 1 0-288zM224 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></symbol>
+  <symbol id="fai_clock" viewBox="0 0 512 512"><path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></symbol>
+  <symbol id="fai_pen_nib" viewBox="0 0 512 512"><path d="M368.4 18.3L312.7 74.1 437.9 199.3l55.7-55.7c21.9-21.9 21.9-57.3 0-79.2L447.6 18.3c-21.9-21.9-57.3-21.9-79.2 0zM288 94.6l-9.2 2.8L134.7 140.6c-19.9 6-35.7 21.2-42.3 41L3.8 445.8c-3.8 11.3-1 23.9 7.3 32.4L164.7 324.7c-3-6.3-4.7-13.3-4.7-20.7c0-26.5 21.5-48 48-48s48 21.5 48 48s-21.5 48-48 48c-7.4 0-14.4-1.7-20.7-4.7L33.7 500.9c8.6 8.3 21.1 11.2 32.4 7.3l264-88.6c19.7-6.6 35-22.4 41-42.3l43.2-144.1 2.8-9.2L288 94.6z"/></symbol>
+  <symbol id="fai_history" viewBox="0 0 512 512"><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></symbol>
+  <symbol id="fai_save" viewBox="0 0 448 512"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></symbol>
+  <symbol id="fai_redo" viewBox="0 0 512 512"><path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></symbol>
+  <symbol id="fai_upload" viewBox="0 0 512 512"><path d="M288 109.3V352c0 17.7-14.3 32-32 32s-32-14.3-32-32V109.3l-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352H192c0 35.3 28.7 64 64 64s64-28.7 64-64H448c35.3 0 64 28.7 64 64v32c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V416c0-35.3 28.7-64 64-64z"/></symbol>
+  <symbol id="fai_download" viewBox="0 0 512 512"><path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H320c0 35.3-28.7 64-64 64s-64-28.7-64-64H64z"/></symbol>
+  <symbol id="fai_trash_alt" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></symbol>
+  <symbol id="fai_user_graduate" viewBox="0 0 448 512"><path d="M219.3 .5c3.1-.6 6.3-.6 9.4 0l200 40C439.9 42.7 448 52.6 448 64s-8.1 21.3-19.3 23.5L352 102.9V160c0 70.7-57.3 128-128 128s-128-57.3-128-128V102.9L48 93.3V184c0 13.3-10.7 24-24 24s-24-10.7-24-24V64C0 52.6 8.1 42.7 19.3 40.5l200-40zM105.8 123.3L224 147.1l118.2-23.8V175.1c0 44.2-35.8 80-80 80H185.8c-44.2 0-80-35.8-80-80V123.3zM1.5 433.1L44.6 421c9.1 21.2 22.8 39.8 40 55.1L16.4 502.6c-11 3.6-23.1-2.3-26.8-13.4s2.3-23.1 13.4-26.8l-1.5-.3zM256 336c0 17.7 14.3 32 32 32s32-14.3 32-32v-9.1c15.1-9.4 26.3-24.1 30.7-41.5l11.4-45.5c10-39.9-14.3-80.5-54.2-90.5s-80.5 14.3-90.5 54.2L206 249.6c-4.4 17.4-1.4 35.5 7.8 50.5l-31.2 8.2c-9.1 2.4-14.5 11.7-12.1 20.8s11.7 14.5 20.8 12.1l39.6-10.4c5.5 4.3 11.5 7.9 18 10.9V336z"/></symbol>
+  <symbol id="fai_chart_pie" viewBox="0 0 512 512"><path d="M304 240V16.6c0-9 7-16.6 16-16.6C443.7 0 512 68.3 512 192c0 9-7.6 16-16.6 16H304zM288 304c0 8.8 7.2 16 16 16H494.2c9 0 16 7.4 15.8 16.4C506 443.9 437.3 512 352 512c-88.4 0-160-71.6-160-160V176c0-8.8 7.2-16 16-16h64c8.8 0 16 7.2 16 16V304zM144 208V352c0 106 86 192 192 192c13.7 0 27.1-1.4 39.9-4.2c-46.3-15.8-80.6-55.6-87.2-104.4c-3.4-24.3 5.9-47.3 15.1-67.5c9.2-20.4 10.3-43.1 3-64.4L291.1 272H288c-26.5 0-48-21.5-48-48V176l-48-16v48z"/></symbol>
+  <symbol id="fai_medal" viewBox="0 0 512 512"><path d="M4.1 38.2C1.4 34.2 0 29.4 0 24.6C0 11 11 0 24.6 0H133.9c11.2 0 21.7 5.9 27.4 15.5l68.5 114.1c-48.2 6.1-91.3 28.6-123.4 61.9L4.1 38.2zm503.7 0L405.6 191.5c-32.1-33.3-75.2-55.8-123.4-61.9L350.7 15.5C356.5 5.9 366.9 0 378.1 0H487.4C501 0 512 11 512 24.6c0 4.8-1.4 9.6-4.1 13.6zM80 336a176 176 0 1 1 352 0A176 176 0 1 1 80 336zm184.4-94.9c-3.4-7-13.3-7-16.8 0l-22.4 45.4c-1.4 2.8-4 4.7-7 5.1L168 298.9c-7.7 1.1-10.7 10.5-5.2 16l36.3 35.4c2.2 2.2 3.2 5.3 2.7 8.3l-8.6 49.9c-1.3 7.6 6.7 13.5 13.6 9.9l44.8-23.6c2.7-1.4 6-1.4 8.7 0l44.8 23.6c6.9 3.6 14.9-2.2 13.6-9.9l-8.6-49.9c-.5-3 .5-6.1 2.7-8.3l36.3-35.4c5.6-5.4 2.5-14.9-5.2-16l-50.1-7.3c-3-.4-5.7-2.4-7-5.1l-22.4-45.4z"/></symbol>
+  <symbol id="fai_trophy" viewBox="0 0 576 512"><path d="M400 0H176c-26.5 0-48.1 21.8-47.1 48.2c.2 5.3 .4 10.6 .7 15.8H24C10.7 64 0 74.7 0 88c0 92.6 33.5 157 78.5 200.7c44.3 43.1 98.3 64.8 138.1 75.8c23.4 6.5 39.4 26 39.4 45.6c0 20.9-17 37.9-37.9 37.9H192c-17.7 0-32 14.3-32 32s14.3 32 32 32h192c17.7 0 32-14.3 32-32s-14.3-32-32-32h-26.1c-20.9 0-37.9-17-37.9-37.9c0-19.6 15.9-39.2 39.4-45.6c39.9-11 93.9-32.7 138.2-75.8C496.5 245 530 180.7 530 88c0-13.3-10.7-24-24-24H446.4c.3-5.2 .5-10.4 .7-15.8C448.1 21.8 426.5 0 400 0zM48.9 112h84.4c9.1 90.1 29.2 150.3 51.9 190.6c-24.9-11-50.8-26.5-73.2-48.3c-32-31.1-58-76-63-142.3zM464.1 254.3c-22.4 21.8-48.3 37.3-73.2 48.3c22.7-40.3 42.8-100.5 51.9-190.6h84.4c-5.1 66.3-31.1 111.2-63 142.3z"/></symbol>
+  <symbol id="fai_lightbulb" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"/></symbol>
+  <symbol id="fai_text_height" viewBox="0 0 576 512"><path d="M151.5 169.8L128 256H192l-23.5-86.2c-2-7.3-12-7.3-14 0l-17 62.2zM0 64C0 46.3 14.3 32 32 32H192c10.7 0 20.7 5.5 26.2 14.6l168 280H416V288c0-17.7 14.3-32 32-32h96c17.7 0 32 14.3 32 32v32c0 17.7-14.3 32-32 32H480v32h32c17.7 0 32 14.3 32 32v32c0 17.7-14.3 32-32 32H480v32c0 17.7-14.3 32-32 32s-32-14.3-32-32V448H384c-10.7 0-20.7-5.5-26.2-14.6l-168-280H160V192c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32H128V96H32C14.3 96 0 81.7 0 64z"/></symbol>
+  <symbol id="fai_database" viewBox="0 0 448 512"><path d="M448 80v48c0 44.2-100.3 80-224 80S0 172.2 0 128V80C0 35.8 100.3 0 224 0S448 35.8 448 80zM393.2 214.7c20.8-7.4 39.9-16.9 54.8-28.6V288c0 44.2-100.3 80-224 80S0 332.2 0 288V186.1c14.9 11.8 34 21.2 54.8 28.6C99.7 230.7 159.5 240 224 240s124.3-9.3 169.2-25.3zM0 346.1c14.9 11.8 34 21.2 54.8 28.6C99.7 390.7 159.5 400 224 400s124.3-9.3 169.2-25.3c20.8-7.4 39.9-16.9 54.8-28.6V432c0 44.2-100.3 80-224 80S0 476.2 0 432V346.1z"/></symbol>
+  <symbol id="fai_layer_group" viewBox="0 0 576 512"><path d="M264.5 5.2c14.9-6.9 32.1-6.9 47 0l218.6 101c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0L45.9 149.8C37.4 145.8 32 137.3 32 128s5.4-17.9 13.9-21.8L264.5 5.2zM476.9 209.6l53.2 24.6c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0L45.9 277.8C37.4 273.8 32 265.3 32 256s5.4-17.9 13.9-21.8l53.2-24.6 152 70.2c23.4 10.8 50.4 10.8 73.8 0l152-70.2zm-152 198.2l152-70.2 53.2 24.6c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0L45.9 405.8C37.4 401.8 32 393.3 32 384s5.4-17.9 13.9-21.8l53.2-24.6 152 70.2c23.4 10.8 50.4 10.8 73.8 0z"/></symbol>
+  <symbol id="fai_user_check" viewBox="0 0 640 512"><path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM625 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L625 209z"/></symbol>
+  <symbol id="fai_inbox" viewBox="0 0 512 512"><path d="M121 32C91.6 32 66 52 58.9 80.5L1.9 308.4C.6 313.5 0 318.7 0 323.9V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V323.9c0-5.2-.6-10.4-1.9-15.5l-57-227.9C446 52 420.4 32 391 32H121zm0 64H391l48 192H336c-13.3 0-24 10.7-24 24c0 48.6-39.4 88-88 88s-88-39.4-88-88c0-13.3-10.7-24-24-24H73L121 96z"/></symbol>
+  <symbol id="fai_star" viewBox="0 0 576 512"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></symbol>
+  <symbol id="fai_check_circle" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></symbol>
+  <symbol id="fai_exclamation_circle" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm-32 224a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></symbol>
+  <symbol id="fai_undo" viewBox="0 0 512 512"><path d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z"/></symbol>
+</svg>
 
 <div id="offline">📵 Offline</div>
 <div id="toast" class="toast"></div>
@@ -1695,7 +1916,7 @@ select, input[type=file] {
     <div class="pg active" id="pg0">
       <!-- Siswa Selector -->
       <div class="siswa-selector-bar">
-        <span class="ico">🎓</span>
+        <svg class="fai" viewBox="0 0 448 512" aria-hidden="true"><path d="M219.3 .5c3.1-.6 6.3-.6 9.4 0l200 40C439.9 42.7 448 52.6 448 64s-8.1 21.3-19.3 23.5L352 102.9V160c0 70.7-57.3 128-128 128s-128-57.3-128-128V102.9L48 93.3V184c0 13.3-10.7 24-24 24s-24-10.7-24-24V64C0 52.6 8.1 42.7 19.3 40.5l200-40zM105.8 123.3L224 147.1l118.2-23.8V175.1c0 44.2-35.8 80-80 80H185.8c-44.2 0-80-35.8-80-80V123.3zM1.5 433.1L44.6 421c9.1 21.2 22.8 39.8 40 55.1L16.4 502.6c-11 3.6-23.1-2.3-26.8-13.4s2.3-23.1 13.4-26.8l-1.5-.3zM256 336c0 17.7 14.3 32 32 32s32-14.3 32-32v-9.1c15.1-9.4 26.3-24.1 30.7-41.5l11.4-45.5c10-39.9-14.3-80.5-54.2-90.5s-80.5 14.3-90.5 54.2L206 249.6c-4.4 17.4-1.4 35.5 7.8 50.5l-31.2 8.2c-9.1 2.4-14.5 11.7-12.1 20.8s11.7 14.5 20.8 12.1l39.6-10.4c5.5 4.3 11.5 7.9 18 10.9V336z"/></svg>
         <span class="siswa-selector-label">Siswa</span>
         <select id="dashboardSiswaSelect" onchange="onDashboardSiswaChange()">
           <option value="SEMUA">— Semua Siswa —</option>
@@ -1778,7 +1999,7 @@ select, input[type=file] {
 
       <!-- Today's Target -->
       <div class="card">
-        <div class="chd"><span class="ico">🎯</span>Target Hari Ini</div>
+        <div class="chd"><svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M448 256A192 192 0 1 0 64 256a192 192 0 1 0 384 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 80a80 80 0 1 0 0-160 80 80 0 1 0 0 160zm0-224a144 144 0 1 1 0 288 144 144 0 1 1 0-288zM224 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>Target Hari Ini</div>
         <div class="cbd">
           <div id="todayTarget">
             <div style="text-align:center; padding:25px; color:var(--mut);">
@@ -1792,7 +2013,7 @@ select, input[type=file] {
 
       <!-- Recent Activity -->
       <div class="card">
-        <div class="chd"><span class="ico">⏱️</span>Aktivitas Terbaru</div>
+        <div class="chd"><svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>Aktivitas Terbaru</div>
         <div class="cbd" id="recentActivity">
           <div class="empty" style="padding:20px;">
             <div class="eico">📋</div>
@@ -1807,21 +2028,32 @@ select, input[type=file] {
       <!-- IMPORT STRIP -->
       <div class="istrip" id="istrip">
         <div class="is-info">
-          <span class="ico">👥</span>
+          <svg class="fai" viewBox="0 0 640 512" aria-hidden="true"><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg>
           <div class="is-text">
             <div class="is-lbl" id="istripLbl">Belum ada daftar siswa</div>
             <div class="is-sub">Upload Excel: Kolom A = Nama, Kolom C = Kelas</div>
           </div>
         </div>
         <label class="is-btn" for="xlsIn">
-          <span class="ico">📤</span> Import
+          <svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M288 109.3V352c0 17.7-14.3 32-32 32s-32-14.3-32-32V109.3l-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352H192c0 35.3 28.7 64 64 64s64-28.7 64-64H448c35.3 0 64 28.7 64 64v32c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V416c0-35.3 28.7-64 64-64z"/></svg> Import
         </label>
         <input type="file" id="xlsIn" accept=".xlsx,.xls" style="display:none" onchange="importMasterData(this)">
       </div>
 
+
+      <!-- Tombol Pencapaian Awal -->
+      <div style="margin-bottom:10px;">
+        <button class="btn bfull" onclick="openPencapaian()"
+          style="background:linear-gradient(135deg,#f9a825,#e6b830); color:#2a1800; border:none; font-weight:800; gap:8px;">
+          <svg class="fai" viewBox="0 0 576 512" aria-hidden="true"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>
+          Input Pencapaian Awal Siswa
+        </button>
+        <div style="text-align:center; font-size:.72rem; color:var(--mut); margin-top:4px;">Untuk siswa yang sudah hafal sebagian sebelum pakai aplikasi</div>
+      </div>
+
       <!-- Form Setoran Juz 30 -->
       <div class="card">
-        <div class="chd"><span><span class="ico">✏️</span>Form Setoran Juz 30</span></div>
+        <div class="chd"><span><svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M368.4 18.3L312.7 74.1 437.9 199.3l55.7-55.7c21.9-21.9 21.9-57.3 0-79.2L447.6 18.3c-21.9-21.9-57.3-21.9-79.2 0zM288 94.6l-9.2 2.8L134.7 140.6c-19.9 6-35.7 21.2-42.3 41L3.8 445.8c-3.8 11.3-1 23.9 7.3 32.4L164.7 324.7c-3-6.3-4.7-13.3-4.7-20.7c0-26.5 21.5-48 48-48s48 21.5 48 48s-21.5 48-48 48c-7.4 0-14.4-1.7-20.7-4.7L33.7 500.9c8.6 8.3 21.1 11.2 32.4 7.3l264-88.6c19.7-6.6 35-22.4 41-42.3l43.2-144.1 2.8-9.2L288 94.6z"/></svg>Form Setoran Juz 30</span></div>
         <div class="cbd">
           <!-- Filter Kelas Tahfidh -->
           <div id="kelasFilterTahfidh" style="display:none; margin-bottom:8px;">
@@ -1881,9 +2113,9 @@ select, input[type=file] {
           </div>
           <!-- Tombol -->
           <div class="brow mt10">
-            <button class="btn bp" onclick="simpanSetoran()"><span class="ico">💾</span> Simpan</button>
+            <button class="btn bp" onclick="simpanSetoran()"><svg class="fai" viewBox="0 0 448 512" aria-hidden="true"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg> Simpan</button>
             <button class="btn bo" style="flex:0 0 auto;padding:10px 14px" onclick="resetForm()">
-              <span class="ico">↩️</span>
+              <svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg>
             </button>
           </div>
         </div>
@@ -1892,10 +2124,10 @@ select, input[type=file] {
       <!-- Riwayat Setoran -->
       <div class="card">
         <div class="chd">
-          <span><span class="ico">🕐</span>Riwayat Setoran</span>
+          <span><svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg>Riwayat Setoran</span>
           <div style="display:flex;align-items:center;gap:8px">
             <span class="bdg bg" id="totSetoran">0</span>
-            <button class="btn bsm bd" onclick="hapusSemuaSetoran()"><span class="ico">🗑️</span></button>
+            <button class="btn bsm bd" onclick="hapusSemuaSetoran()"><svg class="fai" viewBox="0 0 448 512" aria-hidden="true"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg></button>
           </div>
         </div>
         <div class="tbl-wrapper">
@@ -1904,16 +2136,16 @@ select, input[type=file] {
             <tbody id="tblSetoran"></tbody>
           </table>
           <div id="emptySetoran" class="tempty" style="display:none">
-            <span class="ico">📥</span></i>
+            <svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M121 32C91.6 32 66 52 58.9 80.5L1.9 308.4C.6 313.5 0 318.7 0 323.9V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V323.9c0-5.2-.6-10.4-1.9-15.5l-57-227.9C446 52 420.4 32 391 32H121zm0 64H391l48 192H336c-13.3 0-24 10.7-24 24c0 48.6-39.4 88-88 88s-88-39.4-88-88c0-13.3-10.7-24-24-24H73L121 96z"/></svg>
             Belum ada setoran
           </div>
         </div>
         <div class="cft">
           <button class="btn bp bfull" onclick="downloadSetoran()">
-            <span class="ico">⬇️</span> Download Laporan Excel
+            <svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H320c0 35.3-28.7 64-64 64s-64-28.7-64-64H64z"/></svg> Download Laporan Excel
           </button>
           <button class="btn bo bfull mt6" onclick="downloadLaporanGabungan()">
-            <span class="ico">📗</span> Download Gabungan + Absensi
+            <svg class="fai" viewBox="0 0 384 512" aria-hidden="true"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM155.7 250.2L192 302.1l36.3-51.9c7.6-10.9 22.6-13.5 33.4-5.9s13.5 22.6 5.9 33.4L221.3 344l46.4 66.2c7.6 10.9 5 25.8-5.9 33.4s-25.8 5-33.4-5.9L192 385.8l-36.3 51.9c-7.6 10.9-22.6 13.5-33.4 5.9s-13.5-22.6-5.9-33.4L162.7 344l-46.4-66.2c-7.6-10.9-5-25.8 5.9-33.4s25.8-5 33.4 5.9z"/></svg> Download Gabungan + Absensi
           </button>
         </div>
       </div>
@@ -1932,7 +2164,7 @@ select, input[type=file] {
       <!-- Info Data Siswa -->
       <div class="card">
         <div class="chd">
-          <span><span class="ico">👥</span>Daftar Siswa (dari import)</span>
+          <span><svg class="fai" viewBox="0 0 640 512" aria-hidden="true"><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg>Daftar Siswa (dari import)</span>
           <div class="bdg bg" id="jmlSiswaAbsen">0</div>
         </div>
         <!-- Filter Kelas Absensi -->
@@ -1950,7 +2182,7 @@ select, input[type=file] {
 
       <!-- Riwayat Absensi Hari Ini -->
       <div class="card">
-        <div class="chd"><span class="ico">⏱️</span>Riwayat Hari Ini</div>
+        <div class="chd"><svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>Riwayat Hari Ini</div>
         <div class="cbd" id="riwAbsensi">
           <p class="tempty">Belum ada absensi</p>
         </div>
@@ -1958,11 +2190,11 @@ select, input[type=file] {
 
       <!-- Actions -->
       <div class="brow mt8">
-        <button class="btn bp" onclick="simpanAbsensi()"><span class="ico">💾</span> Simpan Excel</button>
-        <button class="btn bd" onclick="resetAbsensiHarian()"><span class="ico">🗑️</span> Reset Hari Ini</button>
+        <button class="btn bp" onclick="simpanAbsensi()"><svg class="fai" viewBox="0 0 448 512" aria-hidden="true"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg> Simpan Excel</button>
+        <button class="btn bd" onclick="resetAbsensiHarian()"><svg class="fai" viewBox="0 0 448 512" aria-hidden="true"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg> Reset Hari Ini</button>
       </div>
       <button class="btn bo bfull mt6" style="margin-bottom:6px" onclick="exportAbsensiPerKelas()">
-        <span class="ico">📑</span> Export Per Kelas
+        <svg class="fai" viewBox="0 0 576 512" aria-hidden="true"><path d="M264.5 5.2c14.9-6.9 32.1-6.9 47 0l218.6 101c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0L45.9 149.8C37.4 145.8 32 137.3 32 128s5.4-17.9 13.9-21.8L264.5 5.2zM476.9 209.6l53.2 24.6c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0L45.9 277.8C37.4 273.8 32 265.3 32 256s5.4-17.9 13.9-21.8l53.2-24.6 152 70.2c23.4 10.8 50.4 10.8 73.8 0l152-70.2zm-152 198.2l152-70.2 53.2 24.6c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0L45.9 405.8C37.4 401.8 32 393.3 32 384s5.4-17.9 13.9-21.8l53.2-24.6 152 70.2c23.4 10.8 50.4 10.8 73.8 0z"/></svg> Export Per Kelas
       </button>
     </div>
 
@@ -1982,7 +2214,7 @@ select, input[type=file] {
         </div>
 
         <div class="card">
-          <div class="chd"><span class="ico">📊</span>Statistik Detail</div>
+          <div class="chd"><svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M304 240V16.6c0-9 7-16.6 16-16.6C443.7 0 512 68.3 512 192c0 9-7.6 16-16.6 16H304zM288 304c0 8.8 7.2 16 16 16H494.2c9 0 16 7.4 15.8 16.4C506 443.9 437.3 512 352 512c-88.4 0-160-71.6-160-160V176c0-8.8 7.2-16 16-16h64c8.8 0 16 7.2 16 16V304zM144 208V352c0 106 86 192 192 192c13.7 0 27.1-1.4 39.9-4.2c-46.3-15.8-80.6-55.6-87.2-104.4c-3.4-24.3 5.9-47.3 15.1-67.5c9.2-20.4 10.3-43.1 3-64.4L291.1 272H288c-26.5 0-48-21.5-48-48V176l-48-16v48z"/></svg>Statistik Detail</div>
           <div class="cbd">
             <div class="stat-detail">
               <div class="stat-row">
@@ -2011,7 +2243,7 @@ select, input[type=file] {
 
         <!-- Badges Section - EXPLICIT 4 COLUMNS -->
         <div class="card">
-          <div class="chd"><span class="ico">🏅</span>Lencana Pencapaian</div>
+          <div class="chd"><svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M4.1 38.2C1.4 34.2 0 29.4 0 24.6C0 11 11 0 24.6 0H133.9c11.2 0 21.7 5.9 27.4 15.5l68.5 114.1c-48.2 6.1-91.3 28.6-123.4 61.9L4.1 38.2zm503.7 0L405.6 191.5c-32.1-33.3-75.2-55.8-123.4-61.9L350.7 15.5C356.5 5.9 366.9 0 378.1 0H487.4C501 0 512 11 512 24.6c0 4.8-1.4 9.6-4.1 13.6zM80 336a176 176 0 1 1 352 0A176 176 0 1 1 80 336zm184.4-94.9c-3.4-7-13.3-7-16.8 0l-22.4 45.4c-1.4 2.8-4 4.7-7 5.1L168 298.9c-7.7 1.1-10.7 10.5-5.2 16l36.3 35.4c2.2 2.2 3.2 5.3 2.7 8.3l-8.6 49.9c-1.3 7.6 6.7 13.5 13.6 9.9l44.8-23.6c2.7-1.4 6-1.4 8.7 0l44.8 23.6c6.9 3.6 14.9-2.2 13.6-9.9l-8.6-49.9c-.5-3 .5-6.1 2.7-8.3l36.3-35.4c5.6-5.4 2.5-14.9-5.2-16l-50.1-7.3c-3-.4-5.7-2.4-7-5.1l-22.4-45.4z"/></svg>Lencana Pencapaian</div>
           <div class="cbd">
             <div class="badges-grid" id="badgesGrid"></div>
           </div>
@@ -2026,7 +2258,7 @@ select, input[type=file] {
         </div>
         
         <div class="card">
-          <div class="chd"><span class="ico">🏆</span>Leaderboard</div>
+          <div class="chd"><svg class="fai" viewBox="0 0 576 512" aria-hidden="true"><path d="M400 0H176c-26.5 0-48.1 21.8-47.1 48.2c.2 5.3 .4 10.6 .7 15.8H24C10.7 64 0 74.7 0 88c0 92.6 33.5 157 78.5 200.7c44.3 43.1 98.3 64.8 138.1 75.8c23.4 6.5 39.4 26 39.4 45.6c0 20.9-17 37.9-37.9 37.9H192c-17.7 0-32 14.3-32 32s14.3 32 32 32h192c17.7 0 32-14.3 32-32s-14.3-32-32-32h-26.1c-20.9 0-37.9-17-37.9-37.9c0-19.6 15.9-39.2 39.4-45.6c39.9-11 93.9-32.7 138.2-75.8C496.5 245 530 180.7 530 88c0-13.3-10.7-24-24-24H446.4c.3-5.2 .5-10.4 .7-15.8C448.1 21.8 426.5 0 400 0zM48.9 112h84.4c9.1 90.1 29.2 150.3 51.9 190.6c-24.9-11-50.8-26.5-73.2-48.3c-32-31.1-58-76-63-142.3zM464.1 254.3c-22.4 21.8-48.3 37.3-73.2 48.3c22.7-40.3 42.8-100.5 51.9-190.6h84.4c-5.1 66.3-31.1 111.2-63 142.3z"/></svg>Leaderboard</div>
           <div class="cbd" id="leaderboardList">
             <div class="empty">
               <div class="eico">🏆</div>
@@ -2044,7 +2276,7 @@ select, input[type=file] {
         </div>
         
         <div class="card">
-          <div class="chd"><span class="ico">💡</span>Insight AI</div>
+          <div class="chd"><svg class="fai" viewBox="0 0 384 512" aria-hidden="true"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"/></svg>Insight AI</div>
           <div class="cbd">
             <div id="aiInsight" style="font-size:.85rem; line-height:1.6; color:var(--txt);">
               <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
@@ -2061,7 +2293,7 @@ select, input[type=file] {
     <!-- TAB 4 — VIEWER -->
     <div class="pg" id="pg4">
       <div class="card">
-        <div class="chd"><span class="ico">📗</span>Upload File Riwayat</div>
+        <div class="chd"><svg class="fai" viewBox="0 0 384 512" aria-hidden="true"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM155.7 250.2L192 302.1l36.3-51.9c7.6-10.9 22.6-13.5 33.4-5.9s13.5 22.6 5.9 33.4L221.3 344l46.4 66.2c7.6 10.9 5 25.8-5.9 33.4s-25.8 5-33.4-5.9L192 385.8l-36.3 51.9c-7.6 10.9-22.6 13.5-33.4 5.9s-13.5-22.6-5.9-33.4L162.7 344l-46.4-66.2c-7.6-10.9-5-25.8 5.9-33.4s25.8-5 33.4 5.9z"/></svg>Upload File Riwayat</div>
         <div class="cbd">
           <div class="slbl">File setoran / absensi (.xlsx, .xls)</div>
           <input type="file" id="fileViewer" accept=".xlsx,.xls,.csv" class="mt6">
@@ -2124,7 +2356,7 @@ select, input[type=file] {
       </div>
 
       <div class="card">
-        <div class="chd"><span class="ico">⭐</span>Fitur Aplikasi</div>
+        <div class="chd"><svg class="fai" viewBox="0 0 576 512" aria-hidden="true"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>Fitur Aplikasi</div>
         <ul class="flist">
           <li>
             <div class="fico fig">📖</div>
@@ -2165,16 +2397,16 @@ select, input[type=file] {
       </div>
 
       <div class="card">
-        <div class="chd"><span class="ico">🗄️</span>Data Siswa Tersimpan</div>
+        <div class="chd"><svg class="fai" viewBox="0 0 448 512" aria-hidden="true"><path d="M448 80v48c0 44.2-100.3 80-224 80S0 172.2 0 128V80C0 35.8 100.3 0 224 0S448 35.8 448 80zM393.2 214.7c20.8-7.4 39.9-16.9 54.8-28.6V288c0 44.2-100.3 80-224 80S0 332.2 0 288V186.1c14.9 11.8 34 21.2 54.8 28.6C99.7 230.7 159.5 240 224 240s124.3-9.3 169.2-25.3zM0 346.1c14.9 11.8 34 21.2 54.8 28.6C99.7 390.7 159.5 400 224 400s124.3-9.3 169.2-25.3c20.8-7.4 39.9-16.9 54.8-28.6V432c0 44.2-100.3 80-224 80S0 476.2 0 432V346.1z"/></svg>Data Siswa Tersimpan</div>
         <div class="cbd">
           <div id="dsSiswaInfo" style="font-size:.85rem;color:var(--mut);margin-bottom:10px">Belum ada siswa tersimpan</div>
           <div id="dsSiswaList" style="max-height:200px;overflow-y:auto;margin-bottom:12px"></div>
-          <button class="btn bd bsm" onclick="hapusSemuaDataSiswa()"><span class="ico">🗑️</span> Hapus Semua Data Siswa</button>
+          <button class="btn bd bsm" onclick="hapusSemuaDataSiswa()"><svg class="fai" viewBox="0 0 448 512" aria-hidden="true"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg> Hapus Semua Data Siswa</button>
         </div>
       </div>
 
       <div class="card">
-        <div class="chd"><span class="ico">🔤</span>Pengaturan Tampilan</div>
+        <div class="chd"><svg class="fai" viewBox="0 0 576 512" aria-hidden="true"><path d="M151.5 169.8L128 256H192l-23.5-86.2c-2-7.3-12-7.3-14 0l-17 62.2zM0 64C0 46.3 14.3 32 32 32H192c10.7 0 20.7 5.5 26.2 14.6l168 280H416V288c0-17.7 14.3-32 32-32h96c17.7 0 32 14.3 32 32v32c0 17.7-14.3 32-32 32H480v32h32c17.7 0 32 14.3 32 32v32c0 17.7-14.3 32-32 32H480v32c0 17.7-14.3 32-32 32s-32-14.3-32-32V448H384c-10.7 0-20.7-5.5-26.2-14.6l-168-280H160V192c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32H128V96H32C14.3 96 0 81.7 0 64z"/></svg>Pengaturan Tampilan</div>
         <div class="cbd">
           <label class="flbl">Ukuran Font</label>
           <div style="display:flex; align-items:center; gap:12px; margin-top:6px;">
@@ -2190,7 +2422,7 @@ select, input[type=file] {
             <button class="btn bo bsm" onclick="changeFontSize(1)" style="width:40px;padding:8px;flex-shrink:0;font-size:1rem;font-weight:800;">A+</button>
           </div>
           <button class="btn bo bsm mt8" onclick="resetFontSize()" style="font-size:.78rem;">
-            <span class="ico">◉</span> Reset ke Default
+            <svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z"/></svg> Reset ke Default
           </button>
         </div>
       </div>
@@ -2209,22 +2441,22 @@ select, input[type=file] {
 <div class="bnav">
   <div class="bnav-buttons">
     <button class="nb on" id="nb0" onclick="goPage(0)">
-      <span class="ico">🏠</span><span>Beranda</span>
+      <svg class="fai" viewBox="0 0 576 512" aria-hidden="true"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.4 0-2.8 0-4.2-.1c-1.1 .1-2.2 .1-3.3 .1H96c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg><span>Beranda</span>
     </button>
     <button class="nb" id="nb1" onclick="goPage(1)">
-      <span class="ico">📖</span><span>Tahfidh</span>
+      <svg class="fai" viewBox="0 0 576 512" aria-hidden="true"><path d="M249.6 471.5c10.8 3.8 22.4-4.1 22.4-15.5V78.6c0-4.2-1.6-8.4-5-11C247.4 52 202.4 32 144 32C93.5 32 46.3 45.3 18.1 56.1C6.8 60.5 0 71.7 0 83.8V454.1c0 11.9 12.8 20.2 24.1 16.5C55.6 460.1 105.5 448 144 448c33.9 0 79 14 105.6 23.5zm76.8 0C353 462 398.1 448 432 448c38.5 0 88.4 12.1 119.9 22.6c11.3 3.8 24.1-4.6 24.1-16.5V83.8c0-12.1-6.8-23.3-18.1-27.6C529.7 45.3 482.5 32 432 32c-58.4 0-103.4 20-123 35.6c-3.3 2.6-5 6.8-5 11V456c0 11.4 11.7 19.3 22.4 15.5z"/></svg><span>Tahfidh</span>
     </button>
     <button class="nb" id="nb2" onclick="goPage(2)">
-      <span class="ico">👥</span><span>Absen</span>
+      <svg class="fai" viewBox="0 0 640 512" aria-hidden="true"><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg><span>Absen</span>
     </button>
     <button class="nb" id="nb3" onclick="goPage(3)">
-      <span class="ico">📈</span><span>Statistik</span>
+      <svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/></svg><span>Statistik</span>
     </button>
     <button class="nb" id="nb4" onclick="goPage(4)">
-      <span class="ico">📗</span><span>Viewer</span>
+      <svg class="fai" viewBox="0 0 384 512" aria-hidden="true"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM155.7 250.2L192 302.1l36.3-51.9c7.6-10.9 22.6-13.5 33.4-5.9s13.5 22.6 5.9 33.4L221.3 344l46.4 66.2c7.6 10.9 5 25.8-5.9 33.4s-25.8 5-33.4-5.9L192 385.8l-36.3 51.9c-7.6 10.9-22.6 13.5-33.4 5.9s-13.5-22.6-5.9-33.4L162.7 344l-46.4-66.2c-7.6-10.9-5-25.8 5.9-33.4s25.8-5 33.4 5.9z"/></svg><span>Viewer</span>
     </button>
     <button class="nb" id="nb5" onclick="goPage(5)">
-      <span class="ico">ℹ️</span><span>Tentang</span>
+      <svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg><span>Tentang</span>
     </button>
   </div>
   <div class="bnav-safe"></div>
@@ -2232,7 +2464,7 @@ select, input[type=file] {
 
 <!-- Floating Action Button -->
 <button class="fab" onclick="quickAction()" id="fabBtn" title="Tandai Semua Hadir" style="display:none;">
-  <span class="ico">✅</span></i>
+  <svg class="fai" viewBox="0 0 640 512" aria-hidden="true"><path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM625 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L625 209z"/></svg>
 </button>
 
 <!-- Install Banner -->
@@ -2274,85 +2506,103 @@ select, input[type=file] {
   document.head.appendChild(Object.assign(document.createElement('link'),{rel:'manifest',href:URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}))}));
 })();
 
+/* ==============================
+   OFFLINE / SW / CACHE STRATEGY
+   Semua data tersimpan localStorage.
+   CDN libs (XLSX, Chart) di-cache via SW.
+   HTML page juga di-cache via SW (cache-first).
+============================== */
 if ('serviceWorker' in navigator) {
-  const CACHE = 'tamma-v3';
-  // Daftar aset yang harus di-cache - pastikan URL persis dengan yang digunakan
-  const ASSETS = [
+  const CACHE_NAME = 'tamma-v4';
+  const CDN_URLS = [
     'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
     'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'
   ];
 
-  const sw = `
-const CACHE = '${CACHE}';
-const ASSETS = ${JSON.stringify(ASSETS)};
+  // Build SW code as string so it can be registered via blob URL.
+  // The HTML page itself is cached by the SW via a runtime cache-on-fetch strategy.
+  const swCode = `
+const CACHE = '${CACHE_NAME}';
+const CDN = ${JSON.stringify(CDN_URLS)};
 
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(cache => {
-      return Promise.allSettled(ASSETS.map(url =>
-        cache.add(url).catch(() => {})
-      ));
-    }).then(() => self.skipWaiting())
+// On install: pre-cache CDN libraries
+self.addEventListener('install', evt => {
+  evt.waitUntil(
+    caches.open(CACHE).then(cache =>
+      Promise.allSettled(CDN.map(u => cache.add(u).catch(()=>{})))
+    ).then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+// On activate: delete old caches
+self.addEventListener('activate', evt => {
+  evt.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', e => {
-  const url = e.request.url;
+// Fetch strategy:
+//   CDN libs  → cache-first (always serve from cache if available)
+//   HTML page → network-first with cache fallback
+//   Other     → network-first with cache fallback
+self.addEventListener('fetch', evt => {
+  const url = evt.request.url;
   const isCDN = url.includes('cdnjs.cloudflare.com') || url.includes('cdn.jsdelivr.net');
+  const isHTTP = url.startsWith('http');
+
+  if (!isHTTP) return; // skip blob:, data:, chrome-extension: etc
 
   if (isCDN) {
-    e.respondWith(
-      caches.match(e.request).then(cached => {
+    // Cache-first for CDN libs
+    evt.respondWith(
+      caches.match(evt.request).then(cached => {
         if (cached) return cached;
-        return fetch(e.request).then(res => {
-          const clone = res.clone();
-          caches.open(CACHE).then(cache => cache.put(e.request, clone));
+        return fetch(evt.request).then(res => {
+          if (res.ok) {
+            const clone = res.clone();
+            caches.open(CACHE).then(c => c.put(evt.request, clone));
+          }
           return res;
-        });
+        }).catch(() => cached); // last resort
       })
     );
   } else {
-    e.respondWith(
-      fetch(e.request).then(res => {
-        const clone = res.clone();
-        caches.open(CACHE).then(cache => cache.put(e.request, clone));
+    // Network-first for everything else (page, etc.)
+    evt.respondWith(
+      fetch(evt.request).then(res => {
+        if (res.ok) {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(evt.request, clone));
+        }
         return res;
-      }).catch(() => caches.match(e.request))
+      }).catch(() => caches.match(evt.request).then(c => c || new Response('Offline', {status: 503})))
     );
   }
 });
 `;
 
-  // Clear all old SW caches on startup
-  if (navigator.serviceWorker.controller) {
-    navigator.serviceWorker.controller.postMessage({type: 'CLEAR_OLD_CACHES'});
-  }
   navigator.serviceWorker.register(
-    URL.createObjectURL(new Blob([sw], { type: 'application/javascript' })),
+    URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' })),
     { scope: './' }
   ).then(reg => {
-    console.log('Service Worker terdaftar, scope:', reg.scope);
+    console.log('[SW] Registered, scope:', reg.scope);
+    // Force SW update check
+    reg.update();
   }).catch(err => {
-    console.warn('Service Worker gagal:', err);
-  });
-
-  window.addEventListener('online', () => {
-    document.getElementById('offline').style.display = 'none';
-    if (typeof showToast === 'function') showToast('Kembali online ✓', 'success');
-  });
-  window.addEventListener('offline', () => {
-    document.getElementById('offline').style.display = 'block';
-    if (typeof showToast === 'function') showToast('Mode offline — semua fitur tetap berjalan', 'info', 4000);
+    console.warn('[SW] Registration failed:', err);
   });
 }
+
+window.addEventListener('online', () => {
+  document.getElementById('offline').style.display = 'none';
+  if (typeof showToast === 'function') showToast('Kembali online ✓', 'success');
+});
+window.addEventListener('offline', () => {
+  document.getElementById('offline').style.display = 'block';
+  if (typeof showToast === 'function') showToast('Mode offline — semua fitur tetap berjalan', 'info', 4000);
+});
 
 let dp=null;
 window.addEventListener('beforeinstallprompt',e=>{
@@ -2438,7 +2688,13 @@ function resetFontSize(){
 ============================== */
 function showToast(msg, type='info', duration=3000){
   const toast = document.getElementById('toast');
-  toast.innerHTML = `<span class="ico">ℹ️</span> ${msg}`;
+  const toastIcons = {
+    success: `<svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>`,
+    error:   `<svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm-32 224a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>`,
+    warning: `<svg class="fai" viewBox="0 0 576 512" aria-hidden="true"><path d="M569.5 440C588 472 564.8 512 527.9 512H48.1c-36.9 0-60-40.1-41.6-72l239.9-416c18.4-31.9 64.9-31.9 83.3 0l239.9 416zM288 176c-13.3 0-24 10.7-24 24v112c0 13.3 10.7 24 24 24s24-10.7 24-24V200c0-13.3-10.7-24-24-24zm-32 224a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>`,
+    info:    `<svg class="fai" viewBox="0 0 512 512" aria-hidden="true"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>`
+  };
+  toast.innerHTML = `${toastIcons[type] || toastIcons.info} ${msg}`;
   toast.className = `toast ${type}`;
   toast.classList.add('show');
   setTimeout(()=>toast.classList.remove('show'), duration);
@@ -2469,28 +2725,29 @@ function goPage(i){
 }
 
 const pgw=document.getElementById('pgwrap');
-let isSwiping=false;
+let _swipeDir=null;
 pgw.addEventListener('touchstart',e=>{
-  tx0=e.changedTouches[0].screenX; 
+  tx0=e.changedTouches[0].screenX;
   ty0=e.changedTouches[0].screenY;
-  isSwiping=false;
+  _swipeDir=null;
 },{passive:true});
 pgw.addEventListener('touchmove',e=>{
-  const dx=e.changedTouches[0].screenX-tx0;
-  const dy=e.changedTouches[0].screenY-ty0;
-  if(Math.abs(dx)>25 && Math.abs(dx)>Math.abs(dy)){
-    isSwiping=true;
-    if(!e.cancelable) return;
-    e.preventDefault();
+  if(_swipeDir) return;
+  const dx=Math.abs(e.changedTouches[0].screenX-tx0);
+  const dy=Math.abs(e.changedTouches[0].screenY-ty0);
+  if(dx>12 || dy>12){
+    _swipeDir = dx > dy ? 'h' : 'v';
   }
+  // Lock scroll when horizontal swipe detected
+  if(_swipeDir==='h' && e.cancelable) e.preventDefault();
 },{passive:false});
 pgw.addEventListener('touchend',e=>{
   if(window.innerWidth > 1024) return;
   const dx=e.changedTouches[0].screenX-tx0;
   const dy=e.changedTouches[0].screenY-ty0;
-  if(!isSwiping||Math.abs(dx)<40||Math.abs(dy)>Math.abs(dx)*1.5)return;
-  isSwiping=false;
+  if(_swipeDir!=='h'||Math.abs(dx)<40) return;
   goPage(dx>0?Math.max(0,curPg-1):Math.min(5,curPg+1));
+  _swipeDir=null;
 },{passive:true});
 
 (function(){
@@ -3907,14 +4164,8 @@ function hapusSemuaDataSiswa(){
    INIT
 ============================== */
 document.addEventListener('DOMContentLoaded', function() {
-  // Auto-clear old caches to force icon fix
   if ('caches' in window) {
-    caches.keys().then(keys => {
-      keys.filter(k => k !== 'tamma-v3').forEach(k => {
-        caches.delete(k);
-        console.log('Deleted old cache:', k);
-      });
-    });
+    caches.keys().then(keys => keys.filter(k => k !== 'tamma-v4').forEach(k => caches.delete(k)));
   }
   if(typeof XLSX === 'undefined'){
     document.querySelectorAll('[onclick*="download"],[onclick*="simpanAbsensi"],[onclick*="export"]').forEach(btn => {
@@ -3953,9 +4204,291 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+
+/* ==============================
+   FITUR PENCAPAIAN AWAL
+============================== */
+let mpaMode = 'cepat';
+let mpaChecked = new Set();
+
+function openPencapaian(){
+  if(!masterSiswa.length){
+    showToast('Import data siswa terlebih dahulu','warning');
+    return;
+  }
+  // Populate siswa dropdown
+  const sel = document.getElementById('mpaSiswa');
+  sel.innerHTML = '<option value="">— Pilih Siswa —</option>';
+  const sorted = [...masterSiswa].sort((a,b) => a.nama.localeCompare(b.nama,'id'));
+  sorted.forEach(s => sel.add(new Option(s.nama, s.nama)));
+
+  // Populate surat dropdown (Mode Cepat)
+  const suratSel = document.getElementById('mpaSuratSampai');
+  suratSel.innerHTML = '<option value="">— Pilih surat terakhir —</option>';
+  SURAT_JUZ30.forEach((s,i) => suratSel.add(new Option(`${i+1}. ${s.nm} (${s.a} ayat)`, i)));
+
+  // Set default date = today
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth()+1).padStart(2,'0');
+  const dd = String(today.getDate()).padStart(2,'0');
+  document.getElementById('mpaTanggal').value = `${yyyy}-${mm}-${dd}`;
+
+  // Reset state
+  mpaMode = 'cepat';
+  mpaChecked = new Set();
+  switchMpaTab('cepat');
+  document.getElementById('mpaExistWarning').style.display = 'none';
+  document.getElementById('quickPreview').textContent = 'Pilih surat terakhir yang sudah dihafal untuk melihat preview.';
+  document.getElementById('mpaSelCount').textContent = '0';
+  document.getElementById('mpaSuratSampai').value = '';
+  buildSuratCheckGrid();
+  document.getElementById('modalPencapaian').classList.add('show');
+}
+
+function closePencapaian(){
+  document.getElementById('modalPencapaian').classList.remove('show');
+}
+
+function closePencapaianOutside(e){
+  if(e.target === document.getElementById('modalPencapaian')) closePencapaian();
+}
+
+function switchMpaTab(mode){
+  mpaMode = mode;
+  document.getElementById('mpaTabCepat').classList.toggle('on', mode==='cepat');
+  document.getElementById('mpaTabManual').classList.toggle('on', mode==='manual');
+  document.getElementById('mpaCepatPanel').style.display = mode==='cepat' ? 'block' : 'none';
+  document.getElementById('mpaManualPanel').style.display = mode==='manual' ? 'block' : 'none';
+  updateMpaCount();
+}
+
+function onMpaSiswaChange(){
+  const nama = document.getElementById('mpaSiswa').value;
+  if(!nama) {
+    document.getElementById('mpaExistWarning').style.display = 'none';
+    return;
+  }
+  const hasData = dataSetoran.some(s => s.nama === nama);
+  document.getElementById('mpaExistWarning').style.display = hasData ? 'block' : 'none';
+}
+
+function buildSuratCheckGrid(){
+  const grid = document.getElementById('suratCheckGrid');
+  grid.innerHTML = SURAT_JUZ30.map((s, i) => `
+    <label class="surat-check-item ${mpaChecked.has(i) ? 'checked' : ''}" id="sci_${i}" onclick="toggleSuratCheck(${i})">
+      <input type="checkbox" ${mpaChecked.has(i) ? 'checked' : ''} onclick="event.stopPropagation();toggleSuratCheck(${i})" id="scb_${i}">
+      <span class="surat-num">${i+1}</span>
+      <span style="flex:1;line-height:1.3;">${s.nm}<br><span style="font-size:.7rem;color:var(--mut);font-weight:400;">${s.a} ayat</span></span>
+    </label>
+  `).join('');
+}
+
+function toggleSuratCheck(i){
+  if(mpaChecked.has(i)) mpaChecked.delete(i);
+  else mpaChecked.add(i);
+  const item = document.getElementById('sci_'+i);
+  const cb = document.getElementById('scb_'+i);
+  if(item) item.classList.toggle('checked', mpaChecked.has(i));
+  if(cb) cb.checked = mpaChecked.has(i);
+  updateMpaCount();
+}
+
+function mpaSelectAll(){
+  SURAT_JUZ30.forEach((_,i) => mpaChecked.add(i));
+  buildSuratCheckGrid();
+  updateMpaCount();
+}
+
+function mpaClearAll(){
+  mpaChecked.clear();
+  buildSuratCheckGrid();
+  updateMpaCount();
+}
+
+function updateMpaCount(){
+  let count = 0;
+  if(mpaMode === 'cepat'){
+    const v = document.getElementById('mpaSuratSampai').value;
+    count = v !== '' ? parseInt(v) + 1 : 0;
+  } else {
+    count = mpaChecked.size;
+  }
+  document.getElementById('mpaSelCount').textContent = count;
+}
+
+function updateQuickPreview(){
+  const v = document.getElementById('mpaSuratSampai').value;
+  const el = document.getElementById('quickPreview');
+  if(v === ''){
+    el.textContent = 'Pilih surat terakhir yang sudah dihafal untuk melihat preview.';
+    updateMpaCount();
+    return;
+  }
+  const idx = parseInt(v);
+  const count = idx + 1;
+  const suratList = SURAT_JUZ30.slice(0, count).map(s => s.nm).join(', ');
+  el.innerHTML = `✅ <strong>${count} surat</strong> akan dicatat: <span style="color:var(--mut); font-weight:400;">${suratList}</span>`;
+  updateMpaCount();
+}
+
+function getMpaSelectedIndices(){
+  if(mpaMode === 'cepat'){
+    const v = document.getElementById('mpaSuratSampai').value;
+    if(v === '') return [];
+    const idx = parseInt(v);
+    return Array.from({length: idx+1}, (_,i) => i);
+  } else {
+    return [...mpaChecked].sort((a,b) => a-b);
+  }
+}
+
+function getTglFromInput(){
+  const raw = document.getElementById('mpaTanggal').value;
+  if(!raw) return new Date().toLocaleDateString('id-ID');
+  const [y,m,d] = raw.split('-');
+  return `${parseInt(d)}/${parseInt(m)}/${y}`;
+}
+
+function simpanPencapaianAwal(){
+  const nama = document.getElementById('mpaSiswa').value;
+  if(!nama){ showToast('Pilih nama siswa terlebih dahulu','warning'); return; }
+
+  const indices = getMpaSelectedIndices();
+  if(!indices.length){ showToast('Pilih minimal 1 surat','warning'); return; }
+
+  // Filter out surahs already recorded for this student
+  const suratSudahAda = new Set(
+    dataSetoran.filter(s => s.nama === nama).map(s => s.surat)
+  );
+  const toInsert = indices.filter(i => !suratSudahAda.has(SURAT_JUZ30[i].nm));
+
+  if(!toInsert.length){
+    showToast('Semua surat yang dipilih sudah ada di riwayat siswa ini','warning');
+    return;
+  }
+
+  const tgl = getTglFromInput();
+  const newRecords = toInsert.map((i, offset) => ({
+    id: Date.now() + offset,
+    tgl,
+    nama,
+    surat: SURAT_JUZ30[i].nm,
+    rentang: `1-${SURAT_JUZ30[i].a}`,
+    stat: 'L',
+    salah: '-',
+    jml: 0,
+    tambahan: 'Data Awal',
+    kategori: '-'
+  }));
+
+  // Prepend to dataSetoran
+  dataSetoran = [...newRecords, ...dataSetoran];
+  localStorage.setItem('db_setoran', JSON.stringify(dataSetoran));
+
+  // Add points (5 per surat data awal)
+  if(!userPoints[nama]) userPoints[nama] = 0;
+  userPoints[nama] += toInsert.length * 5;
+  localStorage.setItem('db_points', JSON.stringify(userPoints));
+
+  renderTblSetoran();
+  updateDashboard();
+
+  const skipped = indices.length - toInsert.length;
+  let msg = `${toInsert.length} surat berhasil dicatat sebagai data awal`;
+  if(skipped > 0) msg += ` (${skipped} surat dilewati - sudah ada)`;
+  showToast(msg, 'success', 5000);
+
+  closePencapaian();
+}
+
 function showToastSafe(msg, type, duration){
   if(typeof showToast === 'function') showToast(msg, type, duration);
 }
 </script>
+
+<!-- Modal Pencapaian Awal -->
+<div class="modal-pencapaian" id="modalPencapaian" onclick="closePencapaianOutside(event)">
+  <div class="mpa-sheet" onclick="event.stopPropagation()">
+    <div class="mpa-hdr">
+      <div class="mpa-title">
+        <svg class="fai" viewBox="0 0 576 512" aria-hidden="true"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>
+        Input Pencapaian Awal
+        <span class="sel-count" id="mpaSelCount">0</span>
+      </div>
+      <button class="mpa-close" onclick="closePencapaian()">×</button>
+    </div>
+
+    <div class="mpa-body">
+      <!-- Info -->
+      <div class="info-badge">
+        💡 Gunakan fitur ini untuk siswa yang sudah hafal sebagian surat sebelum memakai aplikasi ini. Data akan disimpan sebagai <strong>Data Awal</strong> dan langsung terhitung di progress.
+      </div>
+
+      <!-- Pilih Siswa -->
+      <div style="margin-bottom:12px;">
+        <label class="flbl">Pilih Siswa</label>
+        <select id="mpaSiswa" onchange="onMpaSiswaChange()" style="background-image:none;">
+          <option value="">— Pilih Siswa —</option>
+        </select>
+      </div>
+
+      <!-- Peringatan jika siswa sudah punya data awal -->
+      <div id="mpaExistWarning" style="display:none; background:#fff0f0; border:1.5px solid #fecaca; border-radius:8px; padding:9px 12px; font-size:.78rem; color:#b91c1c; margin-bottom:10px;">
+        ⚠️ Siswa ini sudah memiliki data setoran. Surat yang sudah ada tidak akan ditimpa.
+      </div>
+
+      <!-- Mode Tabs -->
+      <div class="mpa-tabs">
+        <button class="mpa-tab on" id="mpaTabCepat" onclick="switchMpaTab('cepat')">⚡ Mode Cepat</button>
+        <button class="mpa-tab" id="mpaTabManual" onclick="switchMpaTab('manual')">✏️ Pilih Manual</button>
+      </div>
+
+      <!-- MODE CEPAT -->
+      <div id="mpaCepatPanel">
+        <label class="flbl">Sudah selesai sampai surat...</label>
+        <div class="quick-range-wrap">
+          <select id="mpaSuratSampai" onchange="updateQuickPreview()" style="background-image:none;">
+            <option value="">— Pilih surat terakhir —</option>
+          </select>
+        </div>
+        <div class="quick-preview" id="quickPreview">
+          Pilih surat terakhir yang sudah dihafal untuk melihat preview.
+        </div>
+        <div style="margin-top:10px; font-size:.78rem; color:var(--mut); line-height:1.5;">
+          Semua surat <strong>dari An-Naba' sampai surat yang dipilih</strong> akan dicatat sebagai sudah selesai (Lancar).
+        </div>
+      </div>
+
+      <!-- MODE MANUAL -->
+      <div id="mpaManualPanel" style="display:none;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+          <label class="flbl" style="margin:0;">Centang surat yang sudah hafal</label>
+          <div style="display:flex; gap:6px;">
+            <button class="btn bo bsm" style="padding:4px 10px; font-size:.72rem;" onclick="mpaSelectAll()">Semua</button>
+            <button class="btn bd bsm" style="padding:4px 10px; font-size:.72rem;" onclick="mpaClearAll()">Hapus</button>
+          </div>
+        </div>
+        <div class="surat-check-grid" id="suratCheckGrid"></div>
+      </div>
+
+      <!-- Tanggal -->
+      <div style="margin-top:14px;">
+        <label class="flbl">Tanggal pencapaian (opsional)</label>
+        <input type="date" id="mpaTanggal" style="width:100%; padding:9px 10px; border:1.5px solid var(--brd); border-radius:var(--rs); font-size:.82rem; background:var(--surf2); color:var(--txt); outline:none; appearance:auto; -webkit-appearance:auto; background-image:none;">
+        <div style="font-size:.72rem; color:var(--mut); margin-top:4px;">Kosongkan untuk menggunakan tanggal hari ini</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mpa-footer">
+      <button class="btn bp bfull" onclick="simpanPencapaianAwal()">
+        <svg class="fai" viewBox="0 0 448 512" aria-hidden="true"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
+        Simpan Pencapaian Awal
+      </button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
