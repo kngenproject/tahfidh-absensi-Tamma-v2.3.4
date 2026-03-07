@@ -3,14 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Tamma-Tahfidh Juz Amma</title>
+<title>Tamma-Tahfidh Juz Amma (Offline Ready)</title>
 <meta name="theme-color" content="#0c4a2a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Gunakan versi spesifik agar konsisten dengan cache -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- URL Chart.js disamakan dengan yang di-cache -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 /* ==============================
    RESET & BASE (CRITICAL FIXES)
@@ -66,8 +68,6 @@ body {
   --HDR:50px;
   --NAV:56px;
 }
-
-
 
 #offline { 
   display:none; 
@@ -185,7 +185,6 @@ body {
   cursor:pointer; 
 }
 
-
 /* Bottom Nav */
 .bnav {
   position: fixed;
@@ -271,11 +270,11 @@ body {
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 10px 10px 5px 10px; /* kurangi padding bottom */
+  padding: 10px 10px 5px 10px;
   -webkit-overflow-scrolling: touch;
   flex-shrink: 0;
 }
-/* Card - FIXED WIDTH */
+/* Card */
 .card:last-child {
   margin-bottom: 5px;
 }.chd { 
@@ -387,7 +386,7 @@ select, input[type=file] {
   padding-right: 28px;
 }
 
-/* GRID SYSTEM - EXPLICIT 2 COLUMNS FOR MOBILE */
+/* GRID SYSTEM */
 .g2 { 
   display:grid; 
   grid-template-columns: 1fr 1fr !important; 
@@ -400,7 +399,6 @@ select, input[type=file] {
   gap:6px; 
   width: 100%;
 }
-
 .mt6 { margin-top:6px; } 
 .mt8 { margin-top:8px; } 
 .mt10 { margin-top:10px; }
@@ -448,7 +446,7 @@ select, input[type=file] {
   height:14px; 
 }
 
-/* AYAT GRID - FIXED */
+/* AYAT GRID */
 .agrid { 
   display:grid; 
   grid-template-columns: repeat(auto-fill, minmax(clamp(34px, 10vw, 48px), 1fr)) !important; 
@@ -531,7 +529,7 @@ select, input[type=file] {
 .bgr { background:#f1f5f9; color:#475569; }
 .bt { background:#e0f7fa; color:var(--tel); }
 
-/* Stats - EXPLICIT 2x2 GRID */
+/* Stats */
 .s4 { 
   display:grid; 
   grid-template-columns: 1fr 1fr !important; 
@@ -570,7 +568,7 @@ select, input[type=file] {
 .cr .scn { color:var(--red); }
 .ct .scn { color:var(--tel); }
 
-/* Table - HORIZONTAL SCROLL */
+/* Table */
 .tbl-wrapper {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -958,7 +956,7 @@ select, input[type=file] {
 }
 .ab-foot {
   text-align: center;
-  padding: 10px 12px 8px; /* kurangi padding bottom */
+  padding: 10px 12px 8px;
   font-size: .82rem;
   color: var(--mut);
   line-height: 1.5;
@@ -977,8 +975,6 @@ select, input[type=file] {
 /* ==============================
    GAMIFICATION (FIXED GRIDS)
 ============================== */
-
-/* Streak & Points - 2 COLUMN GRID */
 .streak-container { 
   background:linear-gradient(135deg,#ff6b35,#f7931e); 
   border-radius:var(--r); 
@@ -1009,7 +1005,6 @@ select, input[type=file] {
 .streak-warning { 
   background:linear-gradient(135deg,var(--red),#ff6b6b); 
 }
-
 .points-container { 
   background:linear-gradient(135deg,var(--gold),#f9d423); 
   border-radius:var(--r); 
@@ -1027,8 +1022,6 @@ select, input[type=file] {
   opacity:.8; 
   margin-top:3px; 
 }
-
-/* Badges - FIXED 4 COLUMNS */
 .badges-grid { 
   display:grid; 
   grid-template-columns: repeat(4, 1fr) !important; 
@@ -1067,8 +1060,6 @@ select, input[type=file] {
   color:var(--mut); 
   margin-top:2px; 
 }
-
-/* Siswa Selector Dashboard */
 .siswa-selector-bar {
   background: var(--surf);
   border-radius: var(--r);
@@ -1095,10 +1086,6 @@ select, input[type=file] {
   color: var(--g8);
   background-color: var(--g0);
 }
-
-#namaSiswa {
-  font-size: .78rem;
-}
 .siswa-selector-label {
   font-size: .78rem;
   font-weight: 700;
@@ -1107,8 +1094,6 @@ select, input[type=file] {
   letter-spacing: .3px;
   flex-shrink: 0;
 }
-
-/* Progress Ring */
 .progress-ring-container { 
   display:flex; 
   align-items:center; 
@@ -1163,8 +1148,6 @@ select, input[type=file] {
   color:var(--mut); 
   margin-top:2px; 
 }
-
-/* Heatmap - FIXED 7 COLUMNS */
 .heatmap-container { 
   background:var(--surf); 
   border-radius:var(--r); 
@@ -1223,8 +1206,6 @@ select, input[type=file] {
   border:2px solid var(--g6); 
   font-weight: 700;
 }
-
-/* Confetti */
 .confetti { 
   position:fixed; 
   width:10px; 
@@ -1238,8 +1219,6 @@ select, input[type=file] {
   0% { transform:translateY(-100px) rotate(0deg); opacity:1; }
   100% { transform:translateY(100vh) rotate(720deg); opacity:0; }
 }
-
-/* Leaderboard - SINGLE COLUMN */
 .leaderboard-item { 
   display:flex; 
   align-items:center; 
@@ -1294,8 +1273,6 @@ select, input[type=file] {
   color:var(--g6); 
   flex-shrink: 0;
 }
-
-/* Chart */
 .chart-container { 
   background:var(--surf); 
   border-radius:var(--r); 
@@ -1319,8 +1296,6 @@ select, input[type=file] {
   margin-bottom:6px;
   flex-shrink: 0;
 }
-
-/* Quick Actions - FIXED 4 COLUMNS */
 .quick-actions { 
   display:grid; 
   grid-template-columns: repeat(4, 1fr) !important; 
@@ -1352,9 +1327,6 @@ select, input[type=file] {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-
-/* Modal */
 .modal-overlay { 
   position:fixed; 
   inset:0; 
@@ -1411,8 +1383,6 @@ select, input[type=file] {
   display:flex; 
   gap:8px; 
 }
-
-/* Notification Banner */
 .notif-banner { 
   background:linear-gradient(135deg,var(--blu),#4fc3f7); 
   border-radius:var(--r); 
@@ -1434,8 +1404,6 @@ select, input[type=file] {
   cursor:pointer; 
   margin-top:8px; 
 }
-
-/* Floating Action Button */
 .fab { 
   position:fixed; 
   bottom:calc(var(--NAV) + 15px); 
@@ -1455,8 +1423,6 @@ select, input[type=file] {
   display:none;
 }
 .fab:active { transform:scale(.95); }
-
-/* Surat Progress */
 .surat-progress { 
   display:flex; 
   align-items:center; 
@@ -1481,8 +1447,6 @@ select, input[type=file] {
   color:var(--mut); 
   white-space:nowrap; 
 }
-
-/* Achievement Popup */
 .achievement-popup { 
   position:fixed; 
   top:50%; 
@@ -1514,8 +1478,6 @@ select, input[type=file] {
   font-size:.85rem; 
   color:#5a4a00; 
 }
-
-/* Tab Navigation */
 .tab-nav { 
   display:flex; 
   gap:4px; 
@@ -1546,8 +1508,6 @@ select, input[type=file] {
   color:var(--g8); 
   box-shadow:0 2px 4px rgba(0,0,0,.1); 
 }
-
-/* Stats Detail */
 .stat-detail { 
   background:var(--surf2); 
   border-radius:var(--rs); 
@@ -1571,8 +1531,6 @@ select, input[type=file] {
   text-align: right;
   margin-left: 10px;
 }
-
-/* Install Banner */
 #instBanner { 
   display:none; 
   position:fixed; 
@@ -1614,8 +1572,6 @@ select, input[type=file] {
   justify-content: center;
   flex-shrink: 0;
 }
-
-/* Drag Overlay */
 .dragov { 
   display:none; 
   position:fixed; 
@@ -1636,10 +1592,6 @@ select, input[type=file] {
   font-size:1rem; 
   font-weight:700; 
 }
-
-/* ==============================
-   SMALL PHONES (<380px)
-============================== */
 @media (max-width: 380px) {
   :root { font-size: 13px; --HDR: 48px; --NAV: 54px; }
   .pg { padding: 8px; }
@@ -1650,14 +1602,9 @@ select, input[type=file] {
   .nb i { font-size: 1rem; }
   .strow { grid-template-columns: repeat(4, 1fr) !important; }
 }
-
-/* ==============================
-   TABLET BREAKPOINT (768px+)
-============================== */
 @media (min-width: 480px) {
   .badges-grid { grid-template-columns: repeat(5, 1fr) !important; }
 }
-
 @media (min-width: 768px) {
   html { font-size: clamp(14px, 2vw, 16px); }
   :root {
@@ -1682,10 +1629,6 @@ select, input[type=file] {
   .card { margin-bottom: 12px; }
   .lhdr, .lrow { grid-template-columns: 2fr 1.8fr 44px 1.2fr !important; }
 }
-
-/* ==============================
-   DESKTOP BREAKPOINT (1024px+)
-============================== */
 @media (min-width: 1024px) {
   html { font-size: 16px; }
   :root { --HDR: 65px; }
@@ -2305,33 +2248,33 @@ select, input[type=file] {
 
 <script>
 /* ==============================
-   PWA & INSTALL
+   PWA & INSTALL - Versi Offline Enhanced
 ============================== */
 (function(){
   const ic="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExMiIgZmlsbD0iIzBjNGEyYSIvPjx0ZXh0IHg9IjI1NiIgeT0iMzIwIiBmb250LXNpemU9IjI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+VjDwvdGV4dD48L3N2Zz4=";
   const m={name:"Tamma-Tahfidh Juz Amma",short_name:"Tamma v2.3.4",start_url:".",display:"standalone",orientation:"portrait",background_color:"#0c4a2a",theme_color:"#0c4a2a",icons:[{src:ic,sizes:"512x512",type:"image/svg+xml",purpose:"any maskable"}]};
   document.head.appendChild(Object.assign(document.createElement('link'),{rel:'manifest',href:URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}))}));
 })();
-if('serviceWorker' in navigator){
-  const CACHE = 'tamma-v1';
+
+if ('serviceWorker' in navigator) {
+  const CACHE = 'tamma-v2';
+  // Daftar aset yang harus di-cache - pastikan URL persis dengan yang digunakan
   const ASSETS = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2',
     'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
-    'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
+    'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'
   ];
 
   const sw = `
 const CACHE = '${CACHE}';
 const ASSETS = ${JSON.stringify(ASSETS)};
 
-// Install: pre-cache semua aset CDN
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE).then(cache => {
-      // Cache satu per satu agar satu gagal tidak blokir semua
       return Promise.allSettled(ASSETS.map(url =>
         cache.add(url).catch(() => {})
       ));
@@ -2339,7 +2282,6 @@ self.addEventListener('install', e => {
   );
 });
 
-// Activate: hapus cache lama
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
@@ -2348,13 +2290,11 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Fetch: cache-first untuk CDN, network-first untuk dokumen utama
 self.addEventListener('fetch', e => {
   const url = e.request.url;
   const isCDN = url.includes('cdnjs.cloudflare.com') || url.includes('cdn.jsdelivr.net');
 
   if (isCDN) {
-    // Cache-first: CDN aset
     e.respondWith(
       caches.match(e.request).then(cached => {
         if (cached) return cached;
@@ -2366,7 +2306,6 @@ self.addEventListener('fetch', e => {
       })
     );
   } else {
-    // Network-first: dokumen HTML utama
     e.respondWith(
       fetch(e.request).then(res => {
         const clone = res.clone();
@@ -2379,23 +2318,21 @@ self.addEventListener('fetch', e => {
 `;
 
   navigator.serviceWorker.register(
-    URL.createObjectURL(new Blob([sw], {type:'application/javascript'})),
-    {scope:'/'}
+    URL.createObjectURL(new Blob([sw], { type: 'application/javascript' })),
+    { scope: './' }
   ).then(reg => {
-    // Jika SW sudah aktif, cek cache CDN — jika belum ada, trigger update
-    reg.addEventListener('updatefound', () => {});
-  }).catch(() => {});
+    console.log('Service Worker terdaftar, scope:', reg.scope);
+  }).catch(err => {
+    console.warn('Service Worker gagal:', err);
+  });
 
-  // Informasikan user saat offline
-  navigator.serviceWorker.ready.then(() => {
-    window.addEventListener('online', () => {
-      document.getElementById('offline').style.display = 'none';
-      showToast('Kembali online ✓', 'success');
-    });
-    window.addEventListener('offline', () => {
-      document.getElementById('offline').style.display = 'block';
-      showToast('Mode offline — semua fitur tetap berjalan', 'info', 4000);
-    });
+  window.addEventListener('online', () => {
+    document.getElementById('offline').style.display = 'none';
+    if (typeof showToast === 'function') showToast('Kembali online ✓', 'success');
+  });
+  window.addEventListener('offline', () => {
+    document.getElementById('offline').style.display = 'block';
+    if (typeof showToast === 'function') showToast('Mode offline — semua fitur tetap berjalan', 'info', 4000);
   });
 }
 
@@ -2448,8 +2385,6 @@ function scheduleNotifications(){
     }, reminderTime - now);
   }
 }
-
-
 
 /* ==============================
    FONT SIZE SETTING
@@ -2592,9 +2527,6 @@ const SURAT_JUZ30 = [
 /* ==============================
    DASHBOARD FUNCTIONS
 ============================== */
-/* ==============================
-   DASHBOARD SISWA FILTER
-============================== */
 let activeDashboardSiswa = 'SEMUA';
 
 function onDashboardSiswaChange(){
@@ -2606,25 +2538,20 @@ function updateDashboardSiswaDropdown(){
   const sel = document.getElementById('dashboardSiswaSelect');
   const prev = sel.value;
   sel.innerHTML = '<option value="SEMUA">— Semua Siswa —</option>';
-
-  // Group by kelas, urutkan nama
   const grouped = {};
   masterSiswa.forEach(s => {
     const k = (s.kelas || 'Umum').trim();
     if(!grouped[k]) grouped[k] = [];
     grouped[k].push(s.nama);
   });
-
   const kelasList = Object.keys(grouped).sort();
-
   if(kelasList.length > 1){
     kelasList.forEach(k => {
       const og = document.createElement('optgroup');
       const namaUrut = grouped[k].slice().sort((a, b) => a.localeCompare(b, 'id'));
       og.label = `── ${k} (${namaUrut.length} siswa) ──`;
       namaUrut.forEach((nama, i) => {
-        const opt = new Option(`${i + 1}. ${nama}`, nama);
-        og.appendChild(opt);
+        og.appendChild(new Option(`${i + 1}. ${nama}`, nama));
       });
       sel.appendChild(og);
     });
@@ -2634,8 +2561,6 @@ function updateDashboardSiswaDropdown(){
       sel.appendChild(new Option(`${i + 1}. ${nama}`, nama));
     });
   }
-
-  // Pertahankan pilihan sebelumnya jika masih ada
   if([...sel.options].some(o => o.value === prev)) sel.value = prev;
   else { sel.value = 'SEMUA'; activeDashboardSiswa = 'SEMUA'; }
 }
@@ -2653,7 +2578,6 @@ function updateDashboard(){
   renderHeatmap();
   updateTodayTarget();
   renderRecentActivity();
-  
   if('Notification' in window && Notification.permission === 'default'){
     document.getElementById('notifBanner').classList.add('show');
   }
@@ -2662,17 +2586,13 @@ function updateDashboard(){
 function updateStreakDisplay(){
   const filtered = getFilteredSetoran();
   let streak = 0;
-  
   if(activeDashboardSiswa === 'SEMUA'){
-    // Streak = siswa dengan streak tertinggi
     Object.values(userStreaks).forEach(s=>{ if(s > streak) streak = s; });
   } else {
     streak = userStreaks[activeDashboardSiswa] || 0;
   }
-  
   const container = document.getElementById('streakContainer');
   document.getElementById('streakCount').textContent = streak;
-  
   container.style.background = '';
   container.style.color = '';
   if(streak >= 30){
@@ -2681,7 +2601,6 @@ function updateStreakDisplay(){
   } else if(streak >= 7){
     container.style.background = 'linear-gradient(135deg,#ff6b35,#f7931e)';
   }
-  
   const today = new Date().toLocaleDateString('id-ID');
   const hasActivityToday = filtered.some(s => s.tgl === today);
   if(!hasActivityToday && streak > 0){
@@ -2705,16 +2624,13 @@ function updateProgressRing(){
   const filtered = getFilteredSetoran();
   const completedSurat = new Set();
   filtered.forEach(s=> completedSurat.add(s.surat));
-  
   const total = SURAT_JUZ30.length;
   const completed = completedSurat.size;
   const percentage = Math.round((completed/total)*100);
-  
   const circle = document.getElementById('progressCircle');
   const radius = 31;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (percentage/100) * circumference;
-  
   circle.style.strokeDashoffset = offset;
   document.getElementById('progressText').textContent = percentage+'%';
   document.getElementById('progressSub').textContent = `${completed} dari ${total} surat selesai`;
@@ -2726,26 +2642,21 @@ function renderHeatmap(){
   const filtered = getFilteredSetoran();
   const grid = document.getElementById('heatmapGrid');
   grid.innerHTML = '';
-  
   for(let i=29; i>=0; i--){
     const d = new Date();
     d.setDate(d.getDate()-i);
     const dateStr = d.toLocaleDateString('id-ID');
     const dayNum = d.getDate();
-    
     const setoranCount = filtered.filter(s=>s.tgl === dateStr).length;
-    
     const div = document.createElement('div');
     div.className = 'heatmap-day';
     div.textContent = dayNum;
-    
     if(setoranCount > 0){
       if(setoranCount >= 10) div.classList.add('active-4');
       else if(setoranCount >= 5) div.classList.add('active-3');
       else if(setoranCount >= 2) div.classList.add('active-2');
       else div.classList.add('active-1');
     }
-    
     if(i === 0) div.classList.add('today');
     div.title = `${dateStr}: ${setoranCount} setoran`;
     grid.appendChild(div);
@@ -2757,7 +2668,6 @@ function updateTodayTarget(){
   const container = document.getElementById('todayTarget');
   const today = new Date().toLocaleDateString('id-ID');
   const todaySetoran = filtered.filter(s=>s.tgl === today);
-  
   if(todaySetoran.length === 0){
     container.innerHTML = `
       <div style="text-align:center; padding:25px; color:var(--mut);">
@@ -2789,7 +2699,6 @@ function renderRecentActivity(){
   const container = document.getElementById('recentActivity');
   const filtered = getFilteredSetoran();
   const recent = [...filtered].slice(0, 5);
-  
   if(recent.length === 0){
     container.innerHTML = `
       <div class="empty" style="padding:25px;">
@@ -2798,7 +2707,6 @@ function renderRecentActivity(){
       </div>`;
     return;
   }
-  
   container.innerHTML = recent.map(item=>`
     <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--brd);">
       <div style="width:42px; height:42px; border-radius:50%; background:var(--g1); display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;">
@@ -2839,7 +2747,6 @@ const BADGES = [
 function renderBadges(){
   const grid = document.getElementById('badgesGrid');
   if(!grid) return;
-  
   grid.innerHTML = BADGES.map(badge=>{
     const unlocked = badge.condition();
     return `
@@ -2855,11 +2762,9 @@ function renderBadges(){
 function showBadgeDetail(id){
   const badge = BADGES.find(b=>b.id === id);
   if(!badge) return;
-  
   const modal = document.getElementById('badgeModal');
   const body = document.getElementById('badgeModalBody');
   const unlocked = badge.condition();
-  
   body.innerHTML = `
     <div style="text-align:center; padding:25px;">
       <div style="font-size:4rem; margin-bottom:15px;">${badge.icon}</div>
@@ -2870,7 +2775,6 @@ function showBadgeDetail(id){
       </div>
     </div>
   `;
-  
   modal.classList.add('show');
 }
 
@@ -2901,7 +2805,6 @@ function showLeaderboard(){
 
 function updateLeaderboard(){
   const userStats = {};
-  
   masterSiswa.forEach(s=>{
     const userSetoran = dataSetoran.filter(d=>d.nama === s.nama);
     userStats[s.nama] = {
@@ -2912,10 +2815,8 @@ function updateLeaderboard(){
       lancar: userSetoran.filter(d=>d.stat === 'L').length
     };
   });
-  
   const sorted = Object.values(userStats).sort((a,b)=>b.points - a.points);
   const list = document.getElementById('leaderboardList');
-  
   if(sorted.length === 0){
     list.innerHTML = `
       <div class="empty">
@@ -2924,14 +2825,12 @@ function updateLeaderboard(){
       </div>`;
     return;
   }
-  
   list.innerHTML = sorted.map((u, i)=>{
     let rankClass = '';
     let rankIcon = i+1;
     if(i===0){ rankClass = 'gold'; rankIcon='🥇'; }
     else if(i===1){ rankClass = 'silver'; rankIcon='🥈'; }
     else if(i===2){ rankClass = 'bronze'; rankIcon='🥉'; }
-    
     return `
       <div class="leaderboard-item">
         <div class="leaderboard-rank ${rankClass}">${rankIcon}</div>
@@ -2953,11 +2852,9 @@ let weeklyChart, classChart, trendChart;
 function switchStatTab(tab, btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  
   document.getElementById('statPersonal').style.display = 'none';
   document.getElementById('statClass').style.display = 'none';
   document.getElementById('statTrends').style.display = 'none';
-  
   if(tab === 'personal'){
     document.getElementById('statPersonal').style.display = 'block';
     renderWeeklyChart();
@@ -2976,24 +2873,19 @@ function switchStatTab(tab, btn){
 function renderWeeklyChart(){
   const ctx = document.getElementById('weeklyChart');
   if(!ctx) return;
-  
   const labels = [];
   const lancarData = [];
   const klData = [];
-  
   for(let i=6; i>=0; i--){
     const d = new Date();
     d.setDate(d.getDate()-i);
     const dateStr = d.toLocaleDateString('id-ID');
     labels.push(d.toLocaleDateString('id-ID',{weekday:'short'}));
-    
     const daySetoran = dataSetoran.filter(s=>s.tgl === dateStr);
     lancarData.push(daySetoran.filter(s=>s.stat === 'L').length);
     klData.push(daySetoran.filter(s=>s.stat === 'KL').length);
   }
-  
   if(weeklyChart) weeklyChart.destroy();
-  
   weeklyChart = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -3032,16 +2924,12 @@ function renderWeeklyChart(){
 function renderClassChart(){
   const ctx = document.getElementById('classChart');
   if(!ctx) return;
-  
   const userStats = {};
   masterSiswa.forEach(s=>{
     userStats[s.nama] = dataSetoran.filter(d=>d.nama === s.nama).length;
   });
-  
   const sorted = Object.entries(userStats).sort((a,b)=>b[1]-a[1]).slice(0,6);
-  
   if(classChart) classChart.destroy();
-  
   classChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
@@ -3067,18 +2955,14 @@ function renderClassChart(){
 function renderTrendChart(){
   const ctx = document.getElementById('trendChart');
   if(!ctx) return;
-  
   const dateMap = {};
   dataSetoran.forEach(s=>{
     if(!dateMap[s.tgl]) dateMap[s.tgl] = 0;
     dateMap[s.tgl]++;
   });
-  
   const sortedDates = Object.keys(dateMap).sort();
   const last30 = sortedDates.slice(-30);
-  
   if(trendChart) trendChart.destroy();
-  
   trendChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -3110,7 +2994,6 @@ function renderTrendChart(){
 
 function generateAIInsight(){
   const container = document.getElementById('aiInsight');
-  
   if(dataSetoran.length < 7){
     container.innerHTML = `
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
@@ -3120,7 +3003,6 @@ function generateAIInsight(){
       <p style="color:var(--mut);">Belum cukup data untuk analisis. Minimal 7 hari data diperlukan.</p>`;
     return;
   }
-  
   const recent = dataSetoran.slice(0, 7);
   const lancarCount = recent.filter(r=>r.stat === 'L').length;
   const avgAyat = recent.reduce((a,b)=>{
@@ -3129,10 +3011,8 @@ function generateAIInsight(){
     const end = parseInt(range[1]) || parseInt(range[0]) || 0;
     return a + (end - start + 1);
   }, 0) / (recent.length || 1);
-  
   let insight = '';
   let tip = '';
-  
   if(lancarCount >= 5){
     insight = 'Performa Anda sangat baik! ' + lancarCount + ' dari 7 setoran terakhir lancar.';
     tip = '💡 Pertahankan konsistensi ini. Coba tingkatkan jumlah ayat per setoran.';
@@ -3143,7 +3023,6 @@ function generateAIInsight(){
     insight = 'Perlu peningkatan. Banyak setoran yang kurang lancar.';
     tip = '💡 Kurangi jumlah ayat per setoran dan perbanyak latihan di rumah.';
   }
-  
   container.innerHTML = `
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
       <span style="font-size:1.5rem;">🤖</span>
@@ -3160,7 +3039,6 @@ function generateAIInsight(){
 
 function updateStatsPage(){
   document.getElementById('statTotalSetoran').textContent = dataSetoran.length;
-  
   const avgAyat = dataSetoran.length > 0 ? 
     dataSetoran.reduce((a,b)=>{
       const range = (b.rentang || '').split('-');
@@ -3169,23 +3047,18 @@ function updateStatsPage(){
       return a + (end - start + 1);
     }, 0) / dataSetoran.length : 0;
   document.getElementById('statAvgAyat').textContent = avgAyat.toFixed(0);
-  
   const lancarPct = dataSetoran.length > 0 ?
     Math.round((dataSetoran.filter(s=>s.stat==='L').length / dataSetoran.length) * 100) : 0;
   document.getElementById('statLancarPct').textContent = lancarPct+'%';
-  
   const suratCount = {};
   dataSetoran.forEach(s=> suratCount[s.surat] = (suratCount[s.surat] || 0) + 1);
   const favSurat = Object.entries(suratCount).sort((a,b)=>b[1]-a[1])[0];
   document.getElementById('statFavSurat').textContent = favSurat ? favSurat[0] : '-';
-  
   const khatamCount = Math.floor(dataSetoran.length / 37);
   document.getElementById('statKhatam').textContent = khatamCount+'x';
-  
   renderWeeklyChart();
   renderBadges();
 }
-
 
 /* ==============================
    CONFETTI EFFECT
@@ -3217,13 +3090,11 @@ function showAchievement(title, desc){
 function importMasterData(input){
   const f = input.files[0];
   if(!f) return;
-  
   const r = new FileReader();
   r.onload = e => {
     try {
       const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
       const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1});
-      
       let startRow = 0;
       if (rows.length > 0) {
         const firstCell = (rows[0][0] || '').toString().trim().toLowerCase();
@@ -3231,26 +3102,19 @@ function importMasterData(input){
           startRow = 1;
         }
       }
-      
       const siswaBaru = [];
-      
       for(let i = startRow; i < rows.length; i++) {
         const row = rows[i];
         if(!row || row.length < 2) continue;
-        
         const nama = (row[0] || '').toString().trim();
         const kelas = (row[2] || 'Umum').toString().trim();
-        
         if(!nama) continue;
-        
         siswaBaru.push({nama, kelas});
       }
-      
       if(siswaBaru.length === 0) {
         showToast('Tidak ada data valid. Pastikan kolom A = Nama, kolom C = Kelas (opsional)', 'error');
         return;
       }
-      
       const uniqueSiswa = [];
       const seen = new Set();
       siswaBaru.forEach(s => {
@@ -3259,13 +3123,10 @@ function importMasterData(input){
           uniqueSiswa.push(s);
         }
       });
-      
       masterSiswa = uniqueSiswa;
       localStorage.setItem('db_master_siswa', JSON.stringify(masterSiswa));
-      
       dataSetoran = dataSetoran.filter(s => masterSiswa.some(m => m.nama === s.nama));
       localStorage.setItem('db_setoran', JSON.stringify(dataSetoran));
-      
       const now = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
       dataAbsensi = masterSiswa.map(s => ({
         nama: s.nama,
@@ -3274,7 +3135,6 @@ function importMasterData(input){
         waktu: now
       }));
       localStorage.setItem('db_absensi_harian', JSON.stringify(dataAbsensi));
-      
       renderDdSiswa();
       updateStrip();
       renderSiswaCards();
@@ -3283,10 +3143,8 @@ function importMasterData(input){
       renderTblSetoran();
       renderDsSiswa();
       updateDashboard();
-      
       showToast(`Berhasil import ${masterSiswa.length} siswa`,'success');
       input.value = '';
-      
     } catch(err) {
       showToast('Error: ' + err.message,'error');
     }
@@ -3314,7 +3172,6 @@ let activeKelasAbsen = 'SEMUA';
 let activeKelasViewer = 'SEMUA';
 
 function getKelasUnik(source){
-  // source: 'master' | 'viewer'
   if(source === 'viewer'){
     if(!vData.length || !vCols.tambahan) return [];
     const set = new Set(vData.map(r => (r[vCols.tambahan]||'').toString().trim()).filter(Boolean));
@@ -3329,10 +3186,8 @@ function renderKelasChips(containerId, filterId, activeKelas, onClickFn, source)
   const container = document.getElementById(containerId);
   const filterDiv = document.getElementById(filterId);
   if(!container || !filterDiv) return;
-
   if(kelas.length <= 1){ filterDiv.style.display = 'none'; return; }
   filterDiv.style.display = 'block';
-
   const all = ['SEMUA', ...kelas];
   container.innerHTML = all.map(k =>
     `<button class="fchip ${activeKelas === k ? 'on' : ''}" onclick="${onClickFn}('${k}')">${k === 'SEMUA' ? 'Semua Kelas' : k}</button>`
@@ -3360,25 +3215,18 @@ function setKelasViewer(k){
 function renderDdSiswa(){
   const sel = document.getElementById('namaSiswa');
   sel.innerHTML = '<option value="">— Pilih Siswa —</option>';
-
   renderKelasChips('kelasChipsTahfidh','kelasFilterTahfidh', activeKelasTahfidh, 'setKelasTahfidh', 'master');
-
   const filtered = activeKelasTahfidh === 'SEMUA'
     ? masterSiswa
     : masterSiswa.filter(s => (s.kelas||'Umum').trim() === activeKelasTahfidh);
-
-  // Group by kelas, urutkan nama dalam tiap kelas
   const grouped = {};
   filtered.forEach(s => {
     const k = (s.kelas||'Umum').trim();
     if(!grouped[k]) grouped[k] = [];
     grouped[k].push(s.nama);
   });
-
   const kelasList = Object.keys(grouped).sort();
-
   if(kelasList.length > 1){
-    // Multi kelas: tampilkan optgroup per kelas, nama diurutkan + nomor urut
     kelasList.forEach(k => {
       const og = document.createElement('optgroup');
       const namaUrut = grouped[k].slice().sort((a, b) => a.localeCompare(b, 'id'));
@@ -3389,7 +3237,6 @@ function renderDdSiswa(){
       sel.appendChild(og);
     });
   } else {
-    // Satu kelas: nama diurutkan + nomor urut, tanpa optgroup
     const namaUrut = filtered.map(s => s.nama).sort((a, b) => a.localeCompare(b, 'id'));
     namaUrut.forEach((nama, i) => {
       sel.add(new Option(`${i + 1}. ${nama}`, nama));
@@ -3403,12 +3250,10 @@ function renderDdSiswa(){
 function renderAyatList(){
   const s = SURAT_JUZ30.find(x => x.nm === document.getElementById('surat').value);
   if(!s) return;
-  
   const m = document.getElementById('ayatMulai');
   const sp = document.getElementById('ayatSampai');
   m.innerHTML = '';
   sp.innerHTML = '';
-  
   for(let i=1; i<=s.a; i++){ 
     m.add(new Option(i,i)); 
     sp.add(new Option(i,i)); 
@@ -3421,7 +3266,6 @@ function renderAyatGrid(){
   const g = document.getElementById('ayatGrid');
   const s = parseInt(document.getElementById('ayatMulai').value) || 1;
   const e = parseInt(document.getElementById('ayatSampai').value) || 1;
-  
   g.innerHTML = '';
   for(let i=s; i<=e; i++){
     const d = document.createElement('div');
@@ -3435,11 +3279,9 @@ function renderAyatGrid(){
 function simpanSetoran(){
   const nama = document.getElementById('namaSiswa').value;
   if(!nama){ showToast('Pilih Nama Siswa!','warning'); return; }
-  
   const ayatSalah = [...document.querySelectorAll('.ai.salah')].map(x => x.textContent);
   const tambahan = document.getElementById('tambahan').value;
   const catSalah = [...document.querySelectorAll('.cat-salah:checked')].map(x => x.value);
-  
   const rec = {
     id: Date.now(),
     tgl: new Date().toLocaleDateString('id-ID'),
@@ -3452,14 +3294,11 @@ function simpanSetoran(){
     tambahan: tambahan || '-',
     kategori: catSalah.join(', ') || '-'
   };
-  
   dataSetoran.unshift(rec);
   localStorage.setItem('db_setoran', JSON.stringify(dataSetoran));
-  
   if(!userPoints[nama]) userPoints[nama] = 0;
   userPoints[nama] += rec.stat === 'L' ? 10 : 5;
   localStorage.setItem('db_points', JSON.stringify(userPoints));
-  
   const today = new Date().toDateString();
   if(lastActive !== today){
     if(!userStreaks[nama]) userStreaks[nama] = 0;
@@ -3468,27 +3307,21 @@ function simpanSetoran(){
     lastActive = today;
     localStorage.setItem('db_last_active', lastActive);
   }
-  
   checkAchievements(nama);
-  
   renderTblSetoran();
   resetForm();
   showToast('Setoran berhasil disimpan!','success');
-  
   if(curPg === 0) updateDashboard();
 }
 
 function checkAchievements(nama){
   const userSetoran = dataSetoran.filter(s=>s.nama === nama);
-  
   if(userSetoran.length === 1){
     showAchievement('Langkah Pertama!', 'Setoran pertama berhasil dicatat');
   }
-  
   if(userStreaks[nama] === 7){
     showAchievement('Pemula Rajin!', '7 hari mengaji tanpa putus');
   }
-  
   const completedSurat = new Set(userSetoran.map(s=>s.surat));
   if(completedSurat.size === 37 && userSetoran.length <= 37){
     showAchievement('Khatam Juz 30!', 'Alhamdulillah, Juz 30 selesai');
@@ -3499,22 +3332,18 @@ function renderTblSetoran(){
   const tbody = document.getElementById('tblSetoran');
   const empty = document.getElementById('emptySetoran');
   document.getElementById('totSetoran').textContent = dataSetoran.length;
-  
   if(!dataSetoran.length){ 
     tbody.innerHTML = ''; 
     empty.style.display = 'block'; 
     return; 
   }
-  
   empty.style.display = 'none';
-  
   tbody.innerHTML = dataSetoran.map(i => {
     const kl = i.stat === 'KL';
     let ket = [];
     if(i.jml > 0) ket.push(`<span style="color:#b91c1c;font-size:.82rem">${i.jml} salah${i.kategori!=='-'?' · '+i.kategori:''}</span>`);
     if(i.salah && i.salah !== '-') ket.push(`<span style="color:#e67e22;font-size:.78rem">${i.salah}</span>`);
     const tam = (i.tambahan && i.tambahan!=='-') ? `<span class="bdg bb" style="font-size:.78rem">${i.tambahan}</span>` : '';
-    
     return `<tr>
       <td><div class="tn">${i.nama}</div><div class="tt">${i.tgl}</div>${tam}</td>
       <td><div class="ts">${i.surat}</div><div style="color:#888;font-size:.82rem">${i.rentang}</div></td>
@@ -3550,7 +3379,6 @@ function resetForm(){
 
 function downloadSetoran(){
   if(!dataSetoran.length){ showToast('Belum ada data','warning'); return; }
-  
   const ws = XLSX.utils.json_to_sheet(dataSetoran.map(i => ({
     'Tanggal': i.tgl,
     'Nama Siswa': i.nama,
@@ -3562,7 +3390,6 @@ function downloadSetoran(){
     'Kategori': i.kategori,
     'Tambahan': i.tambahan
   })));
-  
   ws['!cols'] = [{wch:12},{wch:25},{wch:20},{wch:14},{wch:8},{wch:10},{wch:20},{wch:20},{wch:16}];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Setoran Juz 30");
@@ -3575,9 +3402,7 @@ function downloadLaporanGabungan(){
     showToast('Tidak ada data untuk didownload','warning');
     return;
   }
-  
   const wb = XLSX.utils.book_new();
-  
   if (dataSetoran.length) {
     const wsSetoran = XLSX.utils.json_to_sheet(dataSetoran.map(i => ({
       'Tanggal': i.tgl,
@@ -3596,17 +3421,14 @@ function downloadLaporanGabungan(){
     const wsSetoran = XLSX.utils.aoa_to_sheet([['Tanggal','Nama Siswa','Surat','Rentang Ayat','Status','Jml Salah','Ayat Salah','Kategori','Tambahan']]);
     XLSX.utils.book_append_sheet(wb, wsSetoran, "Setoran Juz 30");
   }
-  
   const d = new Date();
   const tglStr = d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-  
   const absenData = [
     ['Nama', 'Kelas', 'Status', 'Waktu'],
     ...dataAbsensi.map(a => [a.nama, a.kelas || 'Umum', a.status, a.waktu || '-'])
   ];
   const wsAbsen = XLSX.utils.aoa_to_sheet(absenData);
   XLSX.utils.book_append_sheet(wb, wsAbsen, "Absensi");
-  
   const ringkasan = [
     ['RINGKASAN ABSENSI'],
     ['Tanggal', tglStr],
@@ -3617,7 +3439,6 @@ function downloadLaporanGabungan(){
     ['Alpha', dataAbsensi.filter(a => a.status === 'Alpha').length]
   ];
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(ringkasan), "Ringkasan");
-  
   XLSX.writeFile(wb, `laporan_ngaji_pro_${new Date().toISOString().slice(0, 10)}.xlsx`);
   showToast('Laporan gabungan diunduh','success');
 }
@@ -3628,26 +3449,19 @@ function downloadLaporanGabungan(){
 function renderSiswaCards(){
   const c = document.getElementById('siswaCards');
   document.getElementById('jmlSiswaAbsen').textContent = masterSiswa.length;
-  
   if(!masterSiswa.length){
     c.innerHTML = '<div class="empty"><div class="eico">📤</div><h3>Import siswa dulu di tab Tahfidh</h3><p>Data siswa akan otomatis muncul di sini</p></div>';
     document.getElementById('kelasFilterAbsen').style.display = 'none';
     return;
   }
-  
   syncAbsensiWithMaster();
   renderKelasChips('kelasChipsAbsen','kelasFilterAbsen', activeKelasAbsen, 'setKelasAbsen', 'master');
-  
   const filtered = activeKelasAbsen === 'SEMUA'
     ? masterSiswa
     : masterSiswa.filter(s => (s.kelas||'Umum').trim() === activeKelasAbsen);
-
   const stMap = {Hadir:'bg', Ijin:'bgd', Sakit:'bt', Alpha:'br'};
-
-  // Group by kelas jika SEMUA
   const kelas = getKelasUnik('master');
   let html = '';
-
   if(activeKelasAbsen === 'SEMUA' && kelas.length > 1){
     const grouped = {};
     filtered.forEach(s => {
@@ -3662,7 +3476,6 @@ function renderSiswaCards(){
   } else {
     html = filtered.map(s => buildSiswaCard(s, stMap)).join('');
   }
-
   c.innerHTML = html || '<div class="empty"><div class="eico">👥</div><p>Tidak ada siswa di kelas ini</p></div>';
 }
 
@@ -3690,7 +3503,6 @@ function buildSiswaCard(s, stMap){
 function syncAbsensiWithMaster(){
   const existingNames = new Set(dataAbsensi.map(a => a.nama));
   const now = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
-  
   masterSiswa.forEach(s => {
     if(!existingNames.has(s.nama)){
       dataAbsensi.push({
@@ -3701,17 +3513,14 @@ function syncAbsensiWithMaster(){
       });
     }
   });
-  
   const masterNames = new Set(masterSiswa.map(s => s.nama));
   dataAbsensi = dataAbsensi.filter(a => masterNames.has(a.nama));
-  
   localStorage.setItem('db_absensi_harian', JSON.stringify(dataAbsensi));
 }
 
 window.setStatusAbsen = function(nama, status){
   const now = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
   const idx = dataAbsensi.findIndex(a => a.nama === nama);
-  
   if(idx >= 0){
     dataAbsensi[idx].status = status;
     dataAbsensi[idx].waktu = now;
@@ -3721,12 +3530,10 @@ window.setStatusAbsen = function(nama, status){
       dataAbsensi.push({...siswa, status, waktu: now});
     }
   }
-  
   localStorage.setItem('db_absensi_harian', JSON.stringify(dataAbsensi));
   renderSiswaCards();
   updateStatsAbsensi();
   renderRiwAbsensi();
-  
   if(navigator.vibrate) navigator.vibrate(50);
 };
 
@@ -3740,14 +3547,11 @@ function updateStatsAbsensi(){
 function renderRiwAbsensi(){
   const c = document.getElementById('riwAbsensi');
   const list = dataAbsensi.filter(a => a.waktu);
-  
   if(!list.length){ 
     c.innerHTML = '<p class="tempty">Belum ada absensi</p>'; 
     return; 
   }
-  
   const clr = {Hadir:'#22884d', Ijin:'#c07f00', Sakit:'#00838f', Alpha:'#e53935'};
-  
   let h = list.slice(0,10).map(a => `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--brd);">
     <span style="display:flex;align-items:center;gap:8px; font-size: .85rem;">
       <span style="width:10px;height:10px;border-radius:50%;background:${clr[a.status]||'#888'}; flex-shrink:0;"></span>
@@ -3755,23 +3559,18 @@ function renderRiwAbsensi(){
     </span>
     <span class="bdg bgr" style="flex-shrink:0; font-size: .78rem;">${a.waktu}</span>
   </div>`).join('');
-  
   if(list.length > 10) h += `<div style="text-align:center;color:var(--mut);font-size:.82rem;margin-top:8px">... +${list.length-10} lainnya</div>`;
-  
   c.innerHTML = h;
 }
 
 function simpanAbsensi(){
   if(!masterSiswa.length){ showToast('Tidak ada data absensi','warning'); return; }
-  
   const d = new Date();
   const tglStr = d.toLocaleDateString('id-ID', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
-  
   const dataRows = [
     ['Nama', 'Kelas', 'Status', 'Waktu'],
     ...dataAbsensi.map(a => [a.nama, a.kelas || 'Umum', a.status, a.waktu || '-'])
   ];
-  
   const summaryRows = [
     ['LAPORAN ABSENSI MENGAJI'],
     ['Tanggal', tglStr],
@@ -3781,7 +3580,6 @@ function simpanAbsensi(){
     ['Sakit', dataAbsensi.filter(a => a.status === 'Sakit').length],
     ['Alpha', dataAbsensi.filter(a => a.status === 'Alpha').length]
   ];
-  
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(dataRows), "Data Absensi");
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(summaryRows), "Ringkasan");
@@ -3791,26 +3589,21 @@ function simpanAbsensi(){
 
 function exportAbsensiPerKelas(){
   if(!masterSiswa.length){ showToast('Tidak ada data siswa','warning'); return; }
-
   const d = new Date();
   const tglStr = d.toLocaleDateString('id-ID', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
   const dateFile = new Date().toISOString().slice(0,10);
-
   const kelasUnik = [...new Set(masterSiswa.map(s => (s.kelas || 'Umum').trim()))].sort();
-
   kelasUnik.forEach(kelas => {
     const siswaKelas = masterSiswa.filter(s => (s.kelas || 'Umum').trim() === kelas);
     const absenKelas = siswaKelas.map(s => {
       const absen = dataAbsensi.find(a => a.nama === s.nama);
       return [s.nama, kelas, absen ? absen.status : 'Belum Absen', absen ? (absen.waktu || '-') : '-'];
     });
-
     const hadir = absenKelas.filter(r => r[2] === 'Hadir').length;
     const ijin  = absenKelas.filter(r => r[2] === 'Ijin').length;
     const sakit = absenKelas.filter(r => r[2] === 'Sakit').length;
     const alpha = absenKelas.filter(r => r[2] === 'Alpha').length;
     const belum = absenKelas.filter(r => r[2] === 'Belum Absen').length;
-
     const rows = [
       [`ABSENSI KELAS: ${kelas}`],
       ['Tanggal', tglStr],
@@ -3820,19 +3613,16 @@ function exportAbsensiPerKelas(){
       ['No', 'Nama', 'Kelas', 'Status', 'Waktu'],
       ...absenKelas.map((r, i) => [i+1, ...r])
     ];
-
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), kelas.substring(0, 31));
     const safeKelas = kelas.replace(/[\/\\:*?"<>|]/g, '_');
     XLSX.writeFile(wb, `absensi_${safeKelas}_${dateFile}.xlsx`);
   });
-
   showToast(`${kelasUnik.length} file berhasil diunduh`, 'success');
 }
 
 function resetAbsensiHarian(){
   if(!confirm('Reset data absensi hari ini?')) return;
-  
   const now = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
   dataAbsensi = masterSiswa.map(s => ({
     nama: s.nama,
@@ -3840,7 +3630,6 @@ function resetAbsensiHarian(){
     status: 'Hadir',
     waktu: now
   }));
-  
   localStorage.setItem('db_absensi_harian', JSON.stringify(dataAbsensi));
   renderSiswaCards();
   updateStatsAbsensi();
@@ -3924,20 +3713,17 @@ function renderViewer(){
       if (vFil === 'Sakit' && stUpper !== 'SAKIT') return false;
       if (vFil === 'Alpha' && stUpper !== 'ALPHA') return false;
     }
-    // Filter kelas viewer
     if (activeKelasViewer !== 'SEMUA') {
       const kl = (row[vCols.tambahan] || '').toString().trim();
       if (kl !== activeKelasViewer) return false;
     }
     return nm.includes(search);
   });
-  
   const el = document.getElementById('vlist');
   if(!data.length){
     el.innerHTML = '<div class="empty"><div class="eico">🔍</div><h3>Tidak ada data</h3><p>Ubah filter atau kata kunci</p></div>';
     return;
   }
-  
   el.innerHTML = data.map(row => {
     const ri = vData.indexOf(row);
     const st = row[vCols.status] || '';
@@ -3955,7 +3741,6 @@ function renderViewer(){
     const ket1 = [hasErr?`${jml} salah`:'', kat && kat!=='-'?kat:''].filter(Boolean).join(' · ');
     const av = (row[vCols.ayatSalah] || '').toString().trim();
     const ayatStr = (av && av!=='-' && av!=='0') ? 'Ayat: '+av : '';
-    
     let detailHtml = '';
     if (surat) {
       detailHtml = `<div class="cs">
@@ -3967,7 +3752,6 @@ function renderViewer(){
         ${tambahan ? `<span class="cnt ${tagCls(tambahan)}">${tambahan}</span>` : ''}
       </div>`;
     }
-    
     return `<div class="lrow">
       <div class="cn">
         <span class="cnn">${nama}</span>
@@ -4045,13 +3829,11 @@ document.addEventListener('drop', e => {
 function renderDsSiswa(){
   const info = document.getElementById('dsSiswaInfo');
   const list = document.getElementById('dsSiswaList');
-  
   if(!masterSiswa.length){ 
     info.textContent = 'Belum ada siswa tersimpan'; 
     list.innerHTML = ''; 
     return; 
   }
-  
   info.textContent = `${masterSiswa.length} siswa tersimpan`;
   list.innerHTML = masterSiswa.map((s, i) =>
     `<div style="display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--brd); font-size: .85rem;">
@@ -4065,20 +3847,17 @@ function renderDsSiswa(){
 function hapusSemuaDataSiswa(){
   if(!masterSiswa.length){ showToast('Sudah kosong','warning'); return; }
   if(!confirm('Hapus semua data siswa? Semua setoran dan absensi juga akan terhapus!')) return;
-  
   masterSiswa = [];
   dataSetoran = [];
   dataAbsensi = [];
   userPoints = {};
   userStreaks = {};
   activeDashboardSiswa = 'SEMUA';
-  
   localStorage.setItem('db_master_siswa', JSON.stringify(masterSiswa));
   localStorage.setItem('db_setoran', JSON.stringify(dataSetoran));
   localStorage.setItem('db_absensi_harian', JSON.stringify(dataAbsensi));
   localStorage.setItem('db_points', JSON.stringify(userPoints));
   localStorage.setItem('db_streaks', JSON.stringify(userStreaks));
-  
   renderDdSiswa();
   updateStrip();
   renderSiswaCards();
@@ -4087,7 +3866,6 @@ function hapusSemuaDataSiswa(){
   renderDsSiswa();
   renderRiwAbsensi();
   updateDashboard();
-  
   document.getElementById('totSetoran').textContent = '0';
   showToast('Semua data dihapus','success');
 }
@@ -4096,7 +3874,6 @@ function hapusSemuaDataSiswa(){
    INIT
 ============================== */
 document.addEventListener('DOMContentLoaded', function() {
-  // Guard: cek library kritis tersedia
   if(typeof XLSX === 'undefined'){
     document.querySelectorAll('[onclick*="download"],[onclick*="simpanAbsensi"],[onclick*="export"]').forEach(btn => {
       btn.disabled = true;
@@ -4114,7 +3891,6 @@ document.addEventListener('DOMContentLoaded', function() {
       c.parentNode.appendChild(msg);
     });
   }
-
   renderDdSiswa();
   renderAyatList();
   renderTblSetoran();
@@ -4124,13 +3900,10 @@ document.addEventListener('DOMContentLoaded', function() {
   renderRiwAbsensi();
   renderDsSiswa();
   updateDashboard();
-  
-  // Init font size slider
   const savedFont = parseInt(localStorage.getItem('fontSize') || 14);
   const rangeEl = document.getElementById('fontSizeRange');
   if(rangeEl) rangeEl.value = savedFont;
   applyFontSize(savedFont);
-  
   if('Notification' in window && Notification.permission === 'default'){
     setTimeout(()=>{
       document.getElementById('notifBanner').classList.add('show');
@@ -4138,7 +3911,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Toast aman sebelum DOM siap
 function showToastSafe(msg, type, duration){
   if(typeof showToast === 'function') showToast(msg, type, duration);
 }
